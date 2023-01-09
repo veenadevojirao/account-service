@@ -2,6 +2,7 @@ package com.maveric.accountservice.dto;
 
 import com.maveric.accountservice.enums.Type;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor(access= AccessLevel.PUBLIC)
 public class AccountDto {
+    @Id
     private String _id;
 
     private Type type;
