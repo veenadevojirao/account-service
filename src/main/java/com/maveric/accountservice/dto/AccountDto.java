@@ -1,15 +1,9 @@
 package com.maveric.accountservice.dto;
 
 import com.maveric.accountservice.enums.Type;
-import lombok.*;
 
 import java.util.Date;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access= AccessLevel.PUBLIC)
 public class AccountDto {
     private String _id;
 
@@ -22,5 +16,8 @@ public class AccountDto {
 
     private Date createdAt;
     private Date updatedAt;
+
+
+
 
 }

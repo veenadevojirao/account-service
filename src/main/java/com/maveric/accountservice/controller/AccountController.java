@@ -1,6 +1,5 @@
 package com.maveric.accountservice.controller;
 
-import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +17,15 @@ public class AccountController {
 
     @PutMapping("customers/{customerId}/accounts/{accountId}")
     public ResponseEntity<Account> updateAccount(@PathVariable(name = "customerId") String customerId, @PathVariable(name = "accountId") String accountId, @RequestBody Account account) {
-        AccountDto updateAccounts = accountService.updateAccount(customerId, accountId, account);
-System.out.println("accountId");
+        Account AccountDto = accountService.updateAccount(account);
+
         HttpHeaders responseHeaders = new HttpHeaders();
 
         responseHeaders.add("message",
 
                 "Account successfully updated");
 
-        Account AccountDto = new Account();
+
         return new ResponseEntity<>(AccountDto, responseHeaders, HttpStatus.OK);
 
     }
