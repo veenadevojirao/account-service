@@ -12,7 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "Account")
+@Document(collection = "account")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
