@@ -4,8 +4,9 @@ import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
+@Repository
 @Service
 public class AccountServiceImpl implements AccountService {
     @Autowired
