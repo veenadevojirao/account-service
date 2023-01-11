@@ -19,6 +19,7 @@ public class Account {
     private String _id;
     private String customerId;
     private Type type;
+    private String Balance;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
     private Date createdAt=new Date();

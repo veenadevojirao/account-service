@@ -22,8 +22,9 @@ public class AccountDto {
     private String customerId;
 
 
-
+    private String Balance;
     private Date createdAt;
     private Date updatedAt;
+
 
 }
