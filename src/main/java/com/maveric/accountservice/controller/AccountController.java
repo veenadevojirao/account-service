@@ -1,13 +1,16 @@
 package com.maveric.accountservice.controller;
 
 import com.maveric.accountservice.dto.AccountDto;
+import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 
@@ -15,10 +18,10 @@ import java.util.List;
 public class AccountController {
     @Autowired
     AccountService accountService;
-
-    @GetMapping("customers/{customerId}/accounts")
-    public ResponseEntity<List<AccountDto>> getAccountsById(@PathVariable String customerId){
-        List<AccountDto> accountResponse=accountService.getAccountById(customerId);
-        return new ResponseEntity<List<AccountDto>>(accountResponse, HttpStatus.OK);
+    @GetMapping("customers/{customerId}/accounts/{accountId}")
+    public ResponseEntity<AccountDto> getAccount(@PathVariable("customerId") String customerId,
+                                                 @PathVariable("accountId") String accountId){
+        Account accounts=accountService.getAccountByAccId(customerId, accountId);
+        return new ResponseEntity<AccountDto>((MultiValueMap<String, String>) accounts, HttpStatus.OK);
     }
 }
