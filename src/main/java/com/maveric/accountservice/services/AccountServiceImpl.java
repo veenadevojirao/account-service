@@ -5,21 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public abstract class AccountServiceImpl implements AccountService {
-
+public class AccountServiceImpl implements AccountService {
     @Autowired
-    AccountRepository repository;
-
+    AccountRepository accountRepository;
     @Override
     public String deleteAccount(String customerId, String accountId) {
-        repository.deleteById(accountId);
+        accountRepository.deleteById(accountId);
         return "Account deleted successfully.";
-
     }
-
-
-
-
 }
-
 

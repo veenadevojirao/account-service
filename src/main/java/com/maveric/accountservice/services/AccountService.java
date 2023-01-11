@@ -5,5 +5,8 @@ import org.springframework.stereotype.Service;
 @Service
 
 public interface AccountService {
-    String deleteAccount(String customerId, String accountId);
+
+//    Account deleteAccount(String accountId);
+
+    public String deleteAccount(String customerId, String accountId);
 }
