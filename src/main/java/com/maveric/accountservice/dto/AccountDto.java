@@ -25,6 +25,6 @@ public class AccountDto {
 //    private String Balance;
     private Date createdAt;
     private Date updatedAt;
-
+//private  String Balance;
 
 }

@@ -13,13 +13,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "account")
+
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String _id;
     private String customerId;
     private Type type;
-    private String Balance;
+//    private String Balance;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
     private Date createdAt=new Date();
