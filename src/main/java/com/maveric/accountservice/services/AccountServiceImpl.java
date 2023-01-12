@@ -1,11 +1,13 @@
 package com.maveric.accountservice.services;
 
 import com.maveric.accountservice.entity.Account;
+import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -13,15 +15,23 @@ public class AccountServiceImpl implements AccountService {
     AccountRepository accountRepository;
 
     @Override
-    public Account getAccountByAccId(String customerId, String accountId) {
-        Account account = new Account();
-        Iterable<Account> accnt=accountRepository.findAllById(Arrays.asList(customerId,accountId));
+    public Optional<Account> getAccountByAccId(String customerId, String accountId) throws AccountNotFoundException {
 
-        for (Account acc:accnt){
-            account=acc;
+        if (accountRepository.findById(accountId).isPresent()) {
+            Account account = new Account();
+            Iterable<Account> accnt = accountRepository.findAllById(Arrays.asList(customerId, accountId));
+            return accountRepository.findById(accountId) ;
         }
 
-        return account;
+        //for (Account acc:accnt){
+           // account=acc;
+        //}
+        else {
+            throw new AccountNotFoundException("Account details not found");
+        }
+
+
+
     }
 }
 

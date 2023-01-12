@@ -4,6 +4,7 @@ import com.maveric.accountservice.enums.Type;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Getter
@@ -14,11 +15,12 @@ import java.util.Date;
 
 public class AccountDto {
     @Id
+    @NotBlank(message = "Id is mandatory")
     private String _id;
 
     private Type type;
 
-
+    @NotBlank(message = "Customer Id is mandatory")
     private String customerId;
 
 
