@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 public interface AccountService {
 //    AccountDto updateAccount(String customerId, String accountId, Account accountDto);
+//public AccountDto updateAccountDetails(String customerId, String accountId, AccountDto accountDto);
+    Account updateAccount(String customerId, String accountId, Account account);
 
-    Account updateAccount(Account account);
+
 }

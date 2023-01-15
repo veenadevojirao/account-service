@@ -17,7 +17,7 @@ public class AccountController {
 
     @PutMapping("customers/{customerId}/accounts/{accountId}")
     public ResponseEntity<Account> updateAccount(@PathVariable(name = "customerId") String customerId, @PathVariable(name = "accountId") String accountId, @RequestBody Account account) {
-        Account AccountDto = accountService.updateAccount(account);
+        Account AccountDto = accountService.updateAccount(customerId, accountId,account);
 
         HttpHeaders responseHeaders = new HttpHeaders();
 
