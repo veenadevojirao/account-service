@@ -1,24 +1,23 @@
 package com.maveric.accountservice.entity;
 
 import com.maveric.accountservice.enums.Type;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
 
 
     private String _id;
-
+    @NotBlank(message = "Customer Id is mandatory")
     private String customerId;
 
     private Type type;

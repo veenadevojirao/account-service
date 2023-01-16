@@ -1,11 +1,14 @@
 package com.maveric.accountservice.services;
 
 import com.maveric.accountservice.entity.Account;
-import com.maveric.accountservice.exception.NoSuchCustomerExistsException;
+import com.maveric.accountservice.exception.AccountNotFoundException;
+import com.maveric.accountservice.mapper.AccountMapper;
 import com.maveric.accountservice.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
+import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_MESSAGE;
 
 @Repository
 @Service
@@ -13,26 +16,19 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private AccountMapper mapper;
 
-    @Override
     public Account updateAccount(String customerId, String accountId, Account account) {
-        Account existingAccount = accountRepository.findById(account.getCustomerId())
-                .orElse(null);
-        if (existingAccount == account)
-            throw new NoSuchCustomerExistsException(
-                    "No Such Customer exists!!");
-        else {
-            existingAccount.setCustomerId(account.getCustomerId());
-            existingAccount.setType(account.getType());
-            existingAccount.setUpdatedAt(account.getUpdatedAt());
-            existingAccount.setCreatedAt(account.getCreatedAt());
-            Account accountUpdated = accountRepository.save(existingAccount);
-//            return mapper.map(accountUpdated);
-           return accountRepository.save(existingAccount);
-
-//            MongoIterableImpl mapper = null;
-//            return mapper.map(accountUpdated);
-        }
-//        return accountRepository.save(account);
+        Account accountResult=accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE+accountId));
+        accountResult.set_id(accountResult.get_id());
+        accountResult.setCustomerId(account.getCustomerId());
+        accountResult.setType(account.getType());
+        accountResult.setCreatedAt(accountResult.getCreatedAt());
+        accountResult.setUpdatedAt(account.getUpdatedAt());
+        Account accountUpdated = accountRepository.save(accountResult);
+//        return mapper.map(accountUpdated);
+        return accountRepository.save(accountUpdated);
     }
+
 }

@@ -1,13 +1,11 @@
 package com.maveric.accountservice.exception;
 
 import com.maveric.accountservice.dto.ErrorDto;
-import com.maveric.accountservice.dto.ErrorReponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -48,13 +46,5 @@ public class ExceptionControlAdvisor {
         errorDto.setMessage(METHOD_NOT_ALLOWED_MESSAGE);
         return errorDto;
     }
-    @ExceptionHandler(value
-            = NoSuchCustomerExistsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public @ResponseBody ErrorReponseDto
-    handleException(NoSuchCustomerExistsException ex)
-    {
-        return new ErrorReponseDto(
-                HttpStatus.NOT_FOUND.value(), ex.getMessage());
-    }
+
 }

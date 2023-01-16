@@ -12,8 +12,5 @@ public class ErrorReponseDto {
     String message;
 
 
-    public ErrorReponseDto(int value, String message) {
-        String code;
 
-    }
 }
