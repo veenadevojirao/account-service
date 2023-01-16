@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Getter
+@Builder
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,5 +28,6 @@ public class Account {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = true)
     private Date updatedAt =new Date();
+
 
 }
