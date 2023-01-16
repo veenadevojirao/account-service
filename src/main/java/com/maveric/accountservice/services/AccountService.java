@@ -8,5 +8,5 @@ public interface AccountService {
 
 //    Account deleteAccount(String accountId);
 
-    public String deleteAccount(String customerId, String accountId);
+    public String deleteAccount(String accountId);
 }

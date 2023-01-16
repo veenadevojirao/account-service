@@ -21,7 +21,7 @@ public class AccountController {
     @DeleteMapping("customers/{customerId}/accounts/{accountId}")
     public ResponseEntity<AccountDto> deleteAccount(@PathVariable("customerId") String customerId,
                                                     @PathVariable("accountId") String accountId){
-        String AccountDto=accountService.deleteAccount(customerId, accountId);
+        String AccountDto=accountService.deleteAccount(accountId);
         HttpHeaders responseHeaders = new HttpHeaders();
 
         responseHeaders.add("message",
