@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface AccountService {
     List<Account> getAccountById(String customerId);
-    public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String userId)throws CustomerIdMissmatch;
+    public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String customerId)throws CustomerIdMissmatch;
 
 //    public List<AccountDto> getAccounts(String customerId);
 //    public List<AccountDto> getAccountsById(String customerId)throws AccountNotFoundException;

@@ -28,9 +28,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String userId) throws CustomerIdMissmatch {
+    public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String customerId) throws CustomerIdMissmatch {
         Pageable paging = PageRequest.of(page, pageSize);
-        Page<Account> pageResult = accountRepository.findByCustomerId(paging,userId);
+        Page<Account> pageResult = accountRepository.findByCustomerId(paging,customerId);
+//        if(!customerId.equals(accountRepository.findByCustomerId(paging,customerId))){
+//            throw new CustomerIDNotFoundExistsException("Customer Id should not be empty");
+//        }
         if(pageResult.hasContent()) {
             List<Account> account = pageResult.getContent();
             log.info("Retrieved list of accounts from DB");

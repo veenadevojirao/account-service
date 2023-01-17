@@ -19,7 +19,7 @@ public class AccountController {
     AccountService accountService;
 
     @GetMapping("customers/{customerId}/accounts")
-    public ResponseEntity<List<AccountDto>> getAccountByCustomerId(@PathVariable String customerId, @RequestParam(defaultValue = "0") Integer page,
+    public ResponseEntity<List<AccountDto>> getAccountByCustomerId(@PathVariable String customerId, @Valid @RequestParam(defaultValue = "0") Integer page,
                                                                    @RequestParam(defaultValue = "10") @Valid Integer pageSize)throws CustomerIdMissmatch {
 List<AccountDto> accountDtoResponse = accountService.getAccountByUserId(page, pageSize, customerId);
         return new ResponseEntity<>(accountDtoResponse, HttpStatus.OK);
