@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface AccountRepository extends MongoRepository<Account,String> {
 
 
+    String getAccountByAccId();
 }
 

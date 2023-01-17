@@ -46,4 +46,15 @@ public class ExceptionControlAdvisor {
         errorDto.setMessage(METHOD_NOT_ALLOWED_MESSAGE);
         return errorDto;
     }
+    @ExceptionHandler({CustomerIDNotFoundExistsException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public final ErrorDto handleCustomerIDNotFoundExistsException(CustomerIDNotFoundExistsException exception) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(NOT_FOUND);
+        errorDto.setMessage(exception.getMessage());
+        return errorDto;
+    }
+
+
+
 }

@@ -21,4 +21,5 @@ public class Constants {
     public static final String BAD_REQUEST_MESSAGE="Invalid inputs!";
     public static final String INCORRECT_URL_CODE="404";
     public static final String INCORRECT_URL_MESSAGE="The server can not find the requested resource.";
+    public static final String NOT_FOUND="Nosuch customerId is present!";
 }
