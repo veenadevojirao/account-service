@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 
 @RequestMapping("/api/v1")
@@ -19,7 +21,7 @@ public class AccountController {
     AccountService accountService;
 
     @DeleteMapping("customers/{customerId}/accounts/{accountId}")
-    public ResponseEntity<AccountDto> deleteAccount(@PathVariable("customerId") String customerId,
+    public ResponseEntity<AccountDto> deleteAccount(@PathVariable("customerId") String customerId,@Valid
                                                     @PathVariable("accountId") String accountId){
         String AccountDto=accountService.deleteAccount(accountId);
         HttpHeaders responseHeaders = new HttpHeaders();

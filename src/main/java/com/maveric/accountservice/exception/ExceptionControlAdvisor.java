@@ -1,12 +1,17 @@
 package com.maveric.accountservice.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.maveric.accountservice.dto.ErrorDto;
+import com.maveric.accountservice.dto.ErrorReponseDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_CODE;
+import static com.maveric.accountservice.enums.Constants.NOT_FOUND;
 
 @RestControllerAdvice
 public class ExceptionControlAdvisor {
@@ -16,6 +21,34 @@ public class ExceptionControlAdvisor {
         ErrorDto errorDto = new ErrorDto();
         errorDto.setCode(ACCOUNT_NOT_FOUND_CODE);
         errorDto.setMessage(exception.getMessage());
+        return errorDto;
+    }
+    @ExceptionHandler //for enum
+    public ResponseEntity<ErrorReponseDto> invalidValueException(InvalidFormatException ex) {
+
+        //HttpMessageNotReadableException.
+        ErrorReponseDto responseDto = new ErrorReponseDto();
+        responseDto.setCode("400");
+        if (ex.getMessage().contains("enum")) {
+            responseDto.setMessage("Cannot have values other than enum [SAVINGS,CURRENT]");
+        } else
+            responseDto.setMessage(ex.getMessage());
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler({NoSuchCustomerExistsException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public final ErrorDto handleCustomerIDNotFoundExistsException(NoSuchCustomerExistsException exception) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(NOT_FOUND);
+        errorDto.setMessage(exception.getMessage());
+        return errorDto;
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public final ErrorDto handleMessageNotReadableException() {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
+        errorDto.setMessage("Type is mandatory - 'SAVINGS' or 'CURRENT'");
         return errorDto;
     }
 }
