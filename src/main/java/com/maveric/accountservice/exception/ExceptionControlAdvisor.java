@@ -3,13 +3,13 @@ package com.maveric.accountservice.exception;
 import com.maveric.accountservice.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.maveric.accountservice.enums.Constants.*;
+import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_CODE;
+import static com.maveric.accountservice.enums.Constants.BAD_REQUEST_CODE;
 
 @RestControllerAdvice
 public class ExceptionControlAdvisor {
@@ -28,15 +28,7 @@ public class ExceptionControlAdvisor {
         errorDto.setMessage("Type is mandatory - 'SAVINGS' or 'CURRENT'");
         return errorDto;
     }
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorDto handleHttpRequestMethodNotSupportedException(
-            HttpRequestMethodNotSupportedException ex) {
-        ErrorDto errorDto = new ErrorDto();
-        errorDto.setCode(METHOD_NOT_ALLOWED_CODE);
-        errorDto.setMessage("com.maveric.accountservice.constants.String");
-        return errorDto;
-    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDto handleValidationExceptions(
