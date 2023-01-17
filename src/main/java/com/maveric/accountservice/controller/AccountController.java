@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1")
 public class AccountController {
@@ -16,7 +18,7 @@ public class AccountController {
 
 
     @PutMapping("customers/{customerId}/accounts/{accountId}")
-    public ResponseEntity<Account> updateAccount(@PathVariable(name = "customerId") String customerId, @PathVariable(name = "accountId") String accountId, @RequestBody Account account) {
+    public ResponseEntity<Account> updateAccount(@PathVariable(name = "customerId") String customerId, @Valid @PathVariable(name = "accountId") String accountId, @RequestBody Account account) {
         Account AccountDto = accountService.updateAccount(customerId, accountId,account);
 
         HttpHeaders responseHeaders = new HttpHeaders();

@@ -6,11 +6,13 @@ import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.exception.NoSuchCustomerExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_CODE;
+import static com.maveric.accountservice.enums.Constants.METHOD_NOT_ALLOWED_CODE;
 
 public class GlobalExceptionHandler {
 //    private static final Logger log = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -34,5 +36,13 @@ public final ErrorDto handleAccountNotFoundException(AccountNotFoundException ex
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST).getBody();
 
     }
-
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ErrorDto handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException ex) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(METHOD_NOT_ALLOWED_CODE);
+        errorDto.setMessage("customerId should be either should be mandotory");
+        return errorDto;
+    }
 }

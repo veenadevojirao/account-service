@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
 @Getter
 @Setter
@@ -17,7 +16,7 @@ public class Account {
 
 
     private String _id;
-    @NotBlank(message = "Customer Id is mandatory")
+
     private String customerId;
 
     private Type type;

@@ -25,7 +25,16 @@ public class ExceptionControlAdvisor {
     public final ErrorDto handleMessageNotReadableException() {
         ErrorDto errorDto = new ErrorDto();
         errorDto.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
-        errorDto.setMessage("Type should be either 'CUREENT' or 'SAVINGS'");
+        errorDto.setMessage("Type is mandatory - 'SAVINGS' or 'CURRENT'");
+        return errorDto;
+    }
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ErrorDto handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException ex) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(METHOD_NOT_ALLOWED_CODE);
+        errorDto.setMessage("com.maveric.accountservice.constants.String");
         return errorDto;
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -37,14 +46,6 @@ public class ExceptionControlAdvisor {
         errorDto.setMessage(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return errorDto;
     }
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorDto handleHttpRequestMethodNotSupportedException(
-            HttpRequestMethodNotSupportedException ex) {
-        ErrorDto errorDto = new ErrorDto();
-        errorDto.setCode(METHOD_NOT_ALLOWED_CODE);
-        errorDto.setMessage(METHOD_NOT_ALLOWED_MESSAGE);
-        return errorDto;
-    }
+
 
 }
