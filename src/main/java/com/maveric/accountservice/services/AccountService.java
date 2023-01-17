@@ -1,8 +1,7 @@
 package com.maveric.accountservice.services;
 
-import com.maveric.accountservice.entity.Account;
-import com.maveric.accountservice.exception.CustomerIdAlreadyExistsException;
+import com.maveric.accountservice.dto.AccountDto;
 
 public interface AccountService{
-    Account createAccount(Account account) throws CustomerIdAlreadyExistsException;
+    public AccountDto createAccount(String customerId, AccountDto accountDto);
 }

@@ -1,32 +1,29 @@
 package com.maveric.accountservice.entity;
 
 import com.maveric.accountservice.enums.Type;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
-
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "account")
+public class Account {
 
-public class Account{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private String _id;
+    @NotNull(message = "Type is mandatory - 'SAVINGS' or 'CURRENT'")
+    private Type type;
+
     @NotBlank(message = "Customer Id is mandatory")
     private String customerId;
-    @NotBlank(message = "Type should be mandatory")
-    private Type type;
-    //    private String Balance;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
     private Date createdAt=new Date();
@@ -36,4 +33,7 @@ public class Account{
     private Date updatedAt =new Date();
 
 
+//    public static Object builder() {
+//        return builder();
+//    }
 }

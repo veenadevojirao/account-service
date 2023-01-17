@@ -1,6 +1,6 @@
 package com.maveric.accountservice.exception;
 
-public class CustomerIdAlreadyExistsException extends Exception {
+public class CustomerIdAlreadyExistsException extends RuntimeException {
 
 
     public CustomerIdAlreadyExistsException(String message)
