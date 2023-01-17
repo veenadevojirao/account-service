@@ -3,7 +3,7 @@ package com.maveric.accountservice.advice;
 import com.maveric.accountservice.dto.ErrorDto;
 import com.maveric.accountservice.dto.ErrorReponseDto;
 import com.maveric.accountservice.exception.AccountNotFoundException;
-import com.maveric.accountservice.exception.NoSuchCustomerExistsException;
+import com.maveric.accountservice.exception.CustomerIDNotFoundExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -25,10 +25,10 @@ public final ErrorDto handleAccountNotFoundException(AccountNotFoundException ex
     return errorDto;
 }
     @ExceptionHandler(value
-            = NoSuchCustomerExistsException.class)
+            = CustomerIDNotFoundExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public @ResponseBody ErrorReponseDto
-    handleException(NoSuchCustomerExistsException ex)
+    handleException(CustomerIDNotFoundExistsException ex)
     {
         ErrorReponseDto response = new ErrorReponseDto();
         response.setCode("404");

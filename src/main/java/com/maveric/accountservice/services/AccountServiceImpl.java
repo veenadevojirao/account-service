@@ -2,6 +2,7 @@ package com.maveric.accountservice.services;
 
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.exception.AccountNotFoundException;
+import com.maveric.accountservice.exception.CustomerIDNotFoundExistsException;
 import com.maveric.accountservice.mapper.AccountMapper;
 import com.maveric.accountservice.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,15 @@ public class AccountServiceImpl implements AccountService {
 
     public Account updateAccount(String customerId, String accountId, Account account) {
         Account accountResult=accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE+accountId));
+//        accountResult=accountRepository.findById(customerId).orElseThrow(()-> new CustomerIDNotFoundExistsException(BAD_REQUEST_MESSAGE+customerId);
+       if(!customerId.equals(account.getCustomerId())){
+           throw new CustomerIDNotFoundExistsException("Customer Id should not be empty"git);
+       }
+
         accountResult.set_id(accountResult.get_id());
+
+
+
         accountResult.setCustomerId(account.getCustomerId());
         accountResult.setType(account.getType());
         accountResult.setCreatedAt(accountResult.getCreatedAt());

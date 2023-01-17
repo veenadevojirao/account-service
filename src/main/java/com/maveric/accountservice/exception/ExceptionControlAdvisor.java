@@ -8,16 +8,23 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_CODE;
-import static com.maveric.accountservice.enums.Constants.BAD_REQUEST_CODE;
+import static com.maveric.accountservice.enums.Constants.*;
 
 @RestControllerAdvice
 public class ExceptionControlAdvisor {
-    @ExceptionHandler(AccountNotFoundException.class)
+    @ExceptionHandler({AccountNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public final ErrorDto handleAccountNotFoundException(AccountNotFoundException exception) {
         ErrorDto errorDto = new ErrorDto();
         errorDto.setCode(ACCOUNT_NOT_FOUND_CODE);
+        errorDto.setMessage(exception.getMessage());
+        return errorDto;
+    }
+    @ExceptionHandler({CustomerIDNotFoundExistsException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public final ErrorDto handleCustomerIDNotFoundExistsException(CustomerIDNotFoundExistsException exception) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(NOT_FOUND);
         errorDto.setMessage(exception.getMessage());
         return errorDto;
     }
