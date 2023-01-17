@@ -1,5 +1,6 @@
 package com.maveric.accountservice.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.maveric.accountservice.dto.ErrorDto;
 import com.maveric.accountservice.dto.ErrorReponseDto;
 import org.slf4j.Logger;
@@ -58,5 +59,17 @@ public class ExceptionControlAdvisor {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
+    }
+    @ExceptionHandler //for enum
+    public ResponseEntity<ErrorReponseDto> invalidValueException(InvalidFormatException ex) {
+
+        //HttpMessageNotReadableException.
+        ErrorReponseDto responseDto = new ErrorReponseDto();
+        responseDto.setCode("400");
+        if (ex.getMessage().contains("enum")) {
+            responseDto.setMessage("Cannot have values other than enum [SAVINGS,CURRENT]");
+        } else
+            responseDto.setMessage(ex.getMessage());
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
 }

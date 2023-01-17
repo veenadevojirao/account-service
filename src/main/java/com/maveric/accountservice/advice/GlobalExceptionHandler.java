@@ -1,5 +1,6 @@
 package com.maveric.accountservice.advice;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.maveric.accountservice.dto.ErrorReponseDto;
 import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.exception.ExceptionControlAdvisor;
@@ -22,7 +23,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 
     }
+    @ExceptionHandler //for enum
+    public ResponseEntity<ErrorReponseDto> invalidValueException(InvalidFormatException ex) {
 
+        //HttpMessageNotReadableException.
+        ErrorReponseDto responseDto = new ErrorReponseDto();
+        responseDto.setCode("400");
+        if (ex.getMessage().contains("enum")) {
+            responseDto.setMessage("Cannot have values other than enum [SAVINGS,CURRENT]");
+        } else
+            responseDto.setMessage(ex.getMessage());
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(PathParamsVsInputParamsMismatchException.class)
     public ResponseEntity<ErrorReponseDto> handllingException(PathParamsVsInputParamsMismatchException ex) {
         {
