@@ -29,7 +29,7 @@ class AccountServiceApplicationTests {
 	{
 		return  Account.builder()
 				.customerId("1234")
-				.type(Type.SAVINGS.SAVINGS)
+				.type(Type.SAVINGS)
 				.build();
 	}
 	public static AccountDto getAccountDto()
