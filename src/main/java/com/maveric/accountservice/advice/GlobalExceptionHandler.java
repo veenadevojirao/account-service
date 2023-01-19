@@ -3,7 +3,6 @@ package com.maveric.accountservice.advice;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.maveric.accountservice.dto.ErrorReponseDto;
 import com.maveric.accountservice.exception.AccountNotFoundException;
-import com.maveric.accountservice.exception.ExceptionControlAdvisor;
 import com.maveric.accountservice.exception.PathParamsVsInputParamsMismatchException;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(ExceptionControlAdvisor.class);
+//    private static final Logger log = org.slf4j.LoggerFactory.getLogger(ExceptionControlAdvisor.class);
 
     @ExceptionHandler(AccountNotFoundException.class)
     public ResponseEntity<ErrorReponseDto> handllingException(AccountNotFoundException ex) {
@@ -45,4 +44,6 @@ public class GlobalExceptionHandler {
         }
 
     }
+
+
 }

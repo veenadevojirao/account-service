@@ -26,15 +26,16 @@ public class ExceptionControlAdvisor {
         errorDto.setMessage(exception.getMessage());
         return errorDto;
     }
-    @ExceptionHandler(CustomerIdAlreadyExistsException.class)
-    public ResponseEntity<ErrorReponseDto> handllingException(CustomerIdAlreadyExistsException ex){
-        ErrorReponseDto response = new ErrorReponseDto();
-        response.setCode("409");
-        response.setMessage(ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
-
+    @ExceptionHandler(CustomerNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public final ErrorDto handleCustomerNotFoundException(CustomerNotFoundException exception) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(ACCOUNT_NOT_FOUND_CODE);
+        errorDto.setMessage(exception.getMessage());
+        log.error("{}->{}",ACCOUNT_NOT_FOUND_CODE,exception.getMessage());
+        return errorDto;
     }
-//    public ErrorReponseDto
+    //    public ErrorReponseDto
 //    handleCustomerAlreadyExistsException(
 //            CustomerIdAlreadyExistsException ex)
 //    {
@@ -51,14 +52,13 @@ public class ExceptionControlAdvisor {
         return errorDto;
     }
     @ExceptionHandler(PathParamsVsInputParamsMismatchException.class)
-    public ResponseEntity<ErrorReponseDto> handllingException(PathParamsVsInputParamsMismatchException ex) {
-        {
-            ErrorReponseDto response = new ErrorReponseDto();
-            response.setCode("400");
-            response.setMessage(ex.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public final ErrorDto handlePathParamsVsInputParamsMismatchException(PathParamsVsInputParamsMismatchException exception) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(BAD_REQUEST_CODE);
+        errorDto.setMessage(exception.getMessage());
+        log.error("{}-{}",BAD_REQUEST_CODE,exception.getMessage());
+        return errorDto;
     }
     @ExceptionHandler //for enum
     public ResponseEntity<ErrorReponseDto> invalidValueException(InvalidFormatException ex) {
