@@ -1,10 +1,13 @@
 package com.maveric.accountservice.exception;
 
 import com.maveric.accountservice.dto.ErrorDto;
+import com.maveric.accountservice.dto.ErrorReponseDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -20,16 +23,20 @@ public class ExceptionControlAdvisor {
         errorDto.setMessage(exception.getMessage());
         return errorDto;
     }
-    @ExceptionHandler({CustomerIDNotFoundExistsException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public final ErrorDto handleCustomerIDNotFoundExistsException(CustomerIDNotFoundExistsException exception) {
-        ErrorDto errorDto = new ErrorDto();
-        errorDto.setCode(NOT_FOUND);
-        errorDto.setMessage(exception.getMessage());
-        return errorDto;
+    @ExceptionHandler(value
+            = CustomerIDNotFoundExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody ErrorReponseDto
+    handleException(CustomerIDNotFoundExistsException ex)
+    {
+        ErrorReponseDto response = new ErrorReponseDto();
+        response.setCode("404");
+        response.setMessage(ex.getMessage());
+        return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST).getBody();
+
     }
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public final ErrorDto handleMessageNotReadableException() {
+    public final ErrorDto handleMessageNotReadableException(HttpMessageNotReadableException exception) {
         ErrorDto errorDto = new ErrorDto();
         errorDto.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
         errorDto.setMessage("Type is mandatory - 'SAVINGS' or 'CURRENT'");

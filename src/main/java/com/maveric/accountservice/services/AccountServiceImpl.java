@@ -41,4 +41,13 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.save(accountUpdated);
     }
 
+    @Override
+    public Object updateAccount(Object any) {
+        return any;
+    }
+
+
+    public AccountDto updateAccount(String customerId, String accountId, AccountDto accountDto) {
+        return accountDto;
+    }
 }
