@@ -1,5 +1,6 @@
 package com.maveric.accountservice.services;
 
+import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.exception.CustomerIDNotFoundExistsException;
@@ -23,9 +24,9 @@ public class AccountServiceImpl implements AccountService {
     public Account updateAccount(String customerId, String accountId, Account account) {
         Account accountResult=accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE+accountId));
 //        accountResult=accountRepository.findById(customerId).orElseThrow(()-> new CustomerIDNotFoundExistsException(BAD_REQUEST_MESSAGE+customerId);
-       if(!customerId.equals(account.getCustomerId())){
-           throw new CustomerIDNotFoundExistsException("Customer Id should not be empty"git);
-       }
+        if(!customerId.equals(account.getCustomerId())){
+            throw new CustomerIDNotFoundExistsException("Customer Id should not be empty");
+        }
 
         accountResult.set_id(accountResult.get_id());
 
