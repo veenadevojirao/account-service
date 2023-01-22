@@ -13,6 +13,8 @@ public interface AccountService {
     List<Account> getAccountById(String customerId);
     public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String customerId)throws CustomerIdMissmatch;
 
+//    List<AccountDto> getAccount(String s, int i, int i1);
+
 //    public List<AccountDto> getAccounts(String customerId);
 //    public List<AccountDto> getAccountsById(String customerId)throws AccountNotFoundException;
 }
