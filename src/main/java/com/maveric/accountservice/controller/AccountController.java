@@ -1,5 +1,6 @@
 package com.maveric.accountservice.controller;
 
+import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.services.AccountService;
@@ -20,7 +21,7 @@ public class AccountController {
     AccountService accountService;
     @GetMapping("customers/{customerId}/accounts/{accountId}")
     public Optional<Account> getAccount(@PathVariable("customerId") String customerId, @Valid
-                              @PathVariable("accountId") String accountId) throws AccountNotFoundException {
+    @PathVariable("accountId") String accountId) throws AccountNotFoundException {
         Optional<Account> accounts=accountService.getAccountByAccId(customerId,accountId);
 
 

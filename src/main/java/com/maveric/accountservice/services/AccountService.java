@@ -1,5 +1,6 @@
 package com.maveric.accountservice.services;
 
+import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.exception.AccountNotFoundException;
 import org.springframework.stereotype.Service;

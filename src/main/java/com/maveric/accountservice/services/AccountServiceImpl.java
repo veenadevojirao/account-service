@@ -1,5 +1,6 @@
 package com.maveric.accountservice.services;
 
+import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.repository.AccountRepository;
@@ -24,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
         }
 
         //for (Account acc:accnt){
-           // account=acc;
+        // account=acc;
         //}
         else {
             throw new AccountNotFoundException("Account details not found");
@@ -33,6 +34,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     }
+
 }
 
 
