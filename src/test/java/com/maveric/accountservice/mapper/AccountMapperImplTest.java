@@ -18,6 +18,7 @@ public class AccountMapperImplTest {
         Account account = accountMapper.map(getAccountDto());
         assertEquals(getAccount().get_id(),account.get_id());
     }
+
     @Test
     void testMap() {
         AccountDto accountDto = accountMapper.map(getAccount());

@@ -3,28 +3,35 @@ package com.maveric.accountservice.exception;
 import com.maveric.accountservice.dto.ErrorDto;
 import com.maveric.accountservice.dto.ErrorReponseDto;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
 public class ExceptionControlAdvisorTest {
- ExceptionControlAdvisor controlAdvisor=new ExceptionControlAdvisor();
+    private ExceptionControlAdvisor controllerAdvisor = new ExceptionControlAdvisor();
+    @Test
+    void CustomerIDNotFoundExistsException() {
+        CustomerIDNotFoundExistsException exception = new CustomerIDNotFoundExistsException("Customer ID Not found");
+        ErrorDto error = controllerAdvisor.handleCustomerIDNotFoundExistsException(exception);
+        assertEquals("Nosuch customerId is present!",error.getCode());
+    }
+
     @Test
     void handleAccountNotFoundException() {
         AccountNotFoundException exception = new AccountNotFoundException("Account Not found");
-        ErrorDto error = controlAdvisor.handleAccountNotFoundException(exception);
+        ErrorDto error = controllerAdvisor.handleAccountNotFoundException(exception);
         assertEquals("404",error.getCode());
     }
 
 
-    private ExceptionControlAdvisor controllerAdvisor = new ExceptionControlAdvisor();
-    @Test
-    void handleCustomerIdNotFoundException() {
-        CustomerIDNotFoundExistsException exception = new CustomerIDNotFoundExistsException("Customer Not found");
-        ErrorReponseDto error = controllerAdvisor.handleException(exception);
-        assertEquals("404",error.getCode());
-    }
+
+//    @Test
+//    void handleCustomerIdNotFoundException() {
+//        CustomerIDNotFoundExistsException exception = new CustomerIDNotFoundExistsException("Customer Not found");
+//        ErrorReponseDto error = controllerAdvisor.handleException(exception);
+//        assertEquals("404",error.getCode());
+//    }
 
 
     @Test

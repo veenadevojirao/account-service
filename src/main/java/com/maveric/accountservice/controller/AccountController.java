@@ -1,7 +1,11 @@
 package com.maveric.accountservice.controller;
 
 import com.maveric.accountservice.dto.AccountDto;
+
+import com.maveric.accountservice.exception.CustomerIdMissmatch;
+
 import com.maveric.accountservice.entity.Account;
+
 import com.maveric.accountservice.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
+
 
 @RestController
 
@@ -37,6 +44,14 @@ public class AccountController {
 
     }
 
+    @GetMapping("customers/{customerId}/accounts")
+    public ResponseEntity<List<AccountDto>> getAccountByCustomerId(@PathVariable String customerId, @Valid @RequestParam(defaultValue = "0") Integer page,
+                                                                   @RequestParam(defaultValue = "10") @Valid Integer pageSize)throws CustomerIdMissmatch {
+List<AccountDto> accountDtoResponse = accountService.getAccountByUserId(page, pageSize, customerId);
+        return new ResponseEntity<>(accountDtoResponse, HttpStatus.OK);
+
+    }
+
     @DeleteMapping("customers/{customerId}/accounts/{accountId}")
     public ResponseEntity<AccountDto> deleteAccount(@PathVariable("customerId") String customerId,@Valid
     @PathVariable("accountId") String accountId){
@@ -58,5 +73,6 @@ public class AccountController {
 
 
     }
+
 }
 

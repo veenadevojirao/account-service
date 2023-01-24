@@ -2,11 +2,15 @@ package com.maveric.accountservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maveric.accountservice.dto.AccountDto;
+
+import com.maveric.accountservice.dto.BalanceDto;
+
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.enums.Type;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
@@ -37,12 +41,17 @@ class AccountServiceApplicationTests {
 	{
 		return  AccountDto.builder()
 				.customerId("1234")
-				.type(Type.SAVINGS)
+
+				.type(Type.CURRENT)
 				.build();
 	}
 
+
+
+
 	private Object any(Object accountDto) {
 		return accountDto;
+
 	}
 
 }

@@ -35,6 +35,11 @@
 >>>>>>> develop
 		</dependency>
 		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>1.5.2.Final</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
@@ -82,6 +87,8 @@
 			<version>3.0.1</version>
 		</dependency>
 
+<<<<<<< HEAD
+=======
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -89,11 +96,14 @@
 
 
 
+>>>>>>> develop
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>javax.persistence-api</artifactId>
 			<version>2.2</version>
 		</dependency>
+<<<<<<< HEAD
+=======
 
 		<dependency>
 			<groupId>jakarta.validation</groupId>
@@ -114,12 +124,15 @@
 			<artifactId>javax.persistence-api</artifactId>
 			<version>2.2</version>
 		</dependency>
+>>>>>>> develop
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+<<<<<<< HEAD
+=======
 =======
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -144,6 +157,7 @@
         </dependency>
     </dependencies>
 
+>>>>>>> develop
 >>>>>>> develop
 
 	<build>

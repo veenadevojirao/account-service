@@ -11,8 +11,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 @Getter
-@Setter
 @Builder
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
@@ -24,6 +24,8 @@ public class Account {
     private String customerId;
     @NotNull(message = "Type is mandatory - 'SAVINGS' or 'CURRENT'")
     private Type type;
+
+    private String Balance;
 
 
 
@@ -39,3 +41,4 @@ public class Account {
 
 
 }
+

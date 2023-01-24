@@ -13,7 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static com.maveric.accountservice.AccountServiceApplicationTests.getAccount;
@@ -38,6 +42,19 @@ public class AccountServiceImplTest {
     @Mock
     private Page pageResult;
     @Test
+
+    public void testGetAccounts() {
+        Page<Account> pagedResponse = new PageImpl(Arrays.asList(getAccount(),getAccount()));
+        when(repository.findByCustomerId(any(Pageable.class),any())).thenReturn(pagedResponse);
+        when(mapper.mapToDto(any())).thenReturn(Arrays.asList(getAccountDto(),getAccountDto()));
+        List<AccountDto> accountDtos= service.getAccountByUserId(1, 2,"1");
+        assertTrue(accountDtos.size()==2);
+    }
+
+
+
+
+@Test
 
     void updateAccountDetails() {
 
@@ -88,4 +105,5 @@ public class AccountServiceImplTest {
     }
 
 }
+
 

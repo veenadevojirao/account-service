@@ -1,24 +1,28 @@
 package com.maveric.accountservice.services;
 
-import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.exception.CustomerIDNotFoundExistsException;
+import com.maveric.accountservice.exception.CustomerIdMissmatch;
 import com.maveric.accountservice.exception.PathParamsVsInputParamsMismatchException;
 import com.maveric.accountservice.mapper.AccountMapper;
 import com.maveric.accountservice.repository.AccountRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.maveric.accountservice.enums.Constants.ACCOUNT_DELETED_SUCCESS;
 import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_MESSAGE;
 
-import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_MESSAGE;
-
 @Repository
+
 
 @Service
 
@@ -28,7 +32,10 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
 
     AccountRepository accountRepository;
+
+    @Autowired
     private AccountMapper mapper;
+
 
     @Override
     public String deleteAccount(String accountId) {
@@ -88,6 +95,29 @@ public class AccountServiceImpl implements AccountService {
             throw new PathParamsVsInputParamsMismatchException("Customer Id-" + accountDto.getCustomerId() + " not found. Cannot create account.");
         }
 
+    }
+
+    @Override
+    public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String customerId) throws
+            CustomerIdMissmatch {
+        Pageable paging = PageRequest.of(page, pageSize);
+        Page<Account> pageResult = accountRepository.findByCustomerId(paging, customerId);
+//        if(!customerId.equals(accountRepository.findByCustomerId(paging,customerId))){
+//            throw new CustomerIDNotFoundExistsException("Customer Id should not be empty");
+//        }
+        if (pageResult.hasContent()) {
+            List<Account> account = pageResult.getContent();
+            log.info("Retrieved list of accounts from DB");
+            return mapper.mapToDto(account);
+        } else {
+            throw new CustomerIdMissmatch("Customer Id Missmatch");
+
+        }
+
+    }
+
+    public List<Account> getAccountById(String customerId) {
+        return null;
     }
 }
 
