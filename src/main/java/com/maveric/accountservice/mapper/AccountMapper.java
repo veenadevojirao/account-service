@@ -2,11 +2,12 @@ package com.maveric.accountservice.mapper;
 
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
-import org.mapstruct.Mapper;
+//import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel="Account")
+//@Mapper(componentModel="Account")
+
 public interface AccountMapper {
     Account map(AccountDto accountDto);
 
@@ -14,5 +15,8 @@ public interface AccountMapper {
 
     List<Account> mapToModel (List<AccountDto> accounts);
 
+
     List<AccountDto> mapToDto (List<Account> accounts);
+
 }
+

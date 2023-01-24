@@ -2,30 +2,29 @@ package com.maveric.accountservice.service;
 
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
-import com.maveric.accountservice.enums.Type;
+import com.maveric.accountservice.exception.AccountNotFoundException;
+import com.maveric.accountservice.exception.PathParamsVsInputParamsMismatchException;
 import com.maveric.accountservice.mapper.AccountMapperImpl;
 import com.maveric.accountservice.repository.AccountRepository;
 import com.maveric.accountservice.services.AccountServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.Tuple;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.maveric.accountservice.AccountServiceApplicationTests.getAccount;
 import static com.maveric.accountservice.AccountServiceApplicationTests.getAccountDto;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,6 +42,7 @@ public class AccountServiceImplTest {
     @Mock
     private Page pageResult;
     @Test
+
     public void testGetAccounts() {
         Page<Account> pagedResponse = new PageImpl(Arrays.asList(getAccount(),getAccount()));
         when(repository.findByCustomerId(any(Pageable.class),any())).thenReturn(pagedResponse);
@@ -53,4 +53,57 @@ public class AccountServiceImplTest {
 
 
 
+
+@Test
+
+    void updateAccountDetails() {
+
+
+        AccountDto accountDto = service.updateAccount("1234","123",getAccountDto());
+
+        assertSame(accountDto.getType(),getAccountDto().getType());
+    }
+    @Test
+    void notupdateAccountDetails() {
+
+
+        AccountDto accountDto = service.updateAccount("1234","",getAccountDto());
+
+        assertSame(accountDto.getType(),getAccountDto().getType());
+    }
+
+@Test
+    void createAccount() {
+        when(mapper.map(any(AccountDto.class))).thenReturn(getAccount());
+        when(mapper.map(any(Account.class))).thenReturn(getAccountDto());
+        when(repository.save(any())).thenReturn(getAccount());
+
+        AccountDto transactionDto = service.createAccount("1234",getAccountDto());
+
+        assertSame(transactionDto.getCustomerId(), getAccount().getCustomerId());
+    }
+
+    @Test
+    void createAccount_failure() {
+        Throwable error = assertThrows(PathParamsVsInputParamsMismatchException.class,()->service.createAccount("1233",getAccountDto()));  //NOSONAR
+        assertEquals("Customer Id-1234 not found. Cannot create account.",error.getMessage());
+    }
+    @Test
+    void deleteAccount() {
+        when(repository.findById("123")).thenReturn(Optional.of(getAccount()));
+        willDoNothing().given(repository).deleteById("123");
+
+        String accounDto = service.deleteAccount("123");
+
+        assertSame( "Account deleted successfully.",accounDto);
+
+    }
+    @Test
+    void deleteAccount_failure() {
+        Throwable error = assertThrows(AccountNotFoundException.class,()->service.deleteAccount("1234"));
+        assertEquals("Account not found for Id-1234",error.getMessage());
+    }
+
 }
+
+
