@@ -3,28 +3,10 @@ package com.maveric.accountservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.dto.BalanceDto;
-
 import com.maveric.accountservice.enums.Type;
-//import com.maveric.accountservice.exception.PathParamsVsInputParamsMismatchException;
 import com.maveric.accountservice.services.AccountService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-
-import com.maveric.accountservice.entity.Account;
-import com.maveric.accountservice.enums.Type;
-import com.maveric.accountservice.exception.PathParamsVsInputParamsMismatchException;
-import com.maveric.accountservice.mapper.AccountMapper;
-import com.maveric.accountservice.mapper.AccountMapperImpl;
-import com.maveric.accountservice.repository.AccountRepository;
-import com.maveric.accountservice.services.AccountService;
-import com.maveric.accountservice.services.AccountServiceImpl;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.stubbing.OngoingStubbing;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,32 +15,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
-
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-//import static com.maveric.accountservice.AccountServiceApplicationTests.getUserDto;
-import java.util.Date;
-
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.util.NestedServletException;
-
-import java.net.URI;
-import java.util.List;
-
-import static com.maveric.accountservice.AccountServiceApplicationTests.*;
-//import static com.maveric.accountservice.AccountServiceApplicationTests.getUserDto;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static com.maveric.accountservice.enums.Constants.ACCOUNT_DELETED_SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.RequestEntity.get;
-import static org.springframework.http.RequestEntity.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @ContextConfiguration(classes=AccountController.class)
 //@RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -76,6 +42,13 @@ public class AccountControllerTest {
     @Autowired
     ObjectMapper mapper;
     @Test
+    void deleteAccounts() throws Exception {
+        ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(getAccountDto(), HttpStatus.OK);
+        mock.perform(delete("/api/v1/customers/1/accounts/1234")
+                .contentType(MediaType.APPLICATION_JSON));
+
+    }
+    @Test
 
     void updateAccount() throws Exception{
         ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(HttpStatus.OK);
@@ -83,10 +56,10 @@ public class AccountControllerTest {
         when(accountService.updateAccount(any())).thenReturn(getAccountDto());
         mock.perform(MockMvcRequestBuilders.put("/api/v1/customers/1/accounts/1235")
                         .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(getAccountDto())))
+
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-
 
 
 @Test
@@ -100,6 +73,7 @@ public class AccountControllerTest {
     }
 
 
+
     public AccountDto getAccountDto(){
         AccountDto accountDto=new AccountDto();
         accountDto.setCustomerId("1");
@@ -107,6 +81,23 @@ public class AccountControllerTest {
         accountDto.set_id("1");
         return accountDto;
     }
+
+
+
+    @Test
+    public void nottodeleteAccount() throws Exception
+    {
+        when(accountService.deleteAccount(any(String.class))).thenReturn(ACCOUNT_DELETED_SUCCESS);
+//        when(balanceServiceConsumer.deleteBalanceByAccountId(any(String.class))).thenReturn(null);
+//        when(transactionServiceConsumer.deleteAllTransaction(any(String.class))).thenReturn(null);
+        String apiV1 = new String();
+        mock.perform(delete(apiV1+"/1234").header("userId","1234")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+
 
 
     @Test
@@ -120,10 +111,6 @@ public class AccountControllerTest {
                 .andDo(print());
     }
 
-
-
-//    private Object any(Object accountDtozzzzzzzzzz) {
-//    }
 
 
     @Test
@@ -141,8 +128,7 @@ public class AccountControllerTest {
         return accountDto;
     }
 
-//    private Object any(Object accountDto) {
-//        return accountDto;
-//    }
+
 }
+
 

@@ -20,12 +20,12 @@ public class Account {
 
     private String _id;
 
-    @NotNull(message = "Customer Id is mandatory")
+    @NotBlank(message = "Customer Id is mandatory")
     private String customerId;
-
-
     @NotNull(message = "Type is mandatory - 'SAVINGS' or 'CURRENT'")
     private Type type;
+
+
 
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -35,6 +35,7 @@ public class Account {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = true)
     private Date updatedAt =new Date();
+
 
 
 }

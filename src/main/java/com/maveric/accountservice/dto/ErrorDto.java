@@ -16,4 +16,6 @@ public class ErrorDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     Map<String, String> errors;
 
+
 }
+

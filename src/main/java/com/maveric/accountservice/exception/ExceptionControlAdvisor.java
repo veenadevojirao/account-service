@@ -1,5 +1,6 @@
 package com.maveric.accountservice.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.maveric.accountservice.dto.ErrorDto;
 import com.maveric.accountservice.dto.ErrorReponseDto;
 import org.slf4j.Logger;
@@ -10,23 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import static com.maveric.accountservice.enums.Constants.*;
-
-
-
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.maveric.accountservice.dto.ErrorDto;
-import com.maveric.accountservice.dto.ErrorReponseDto;
-import org.slf4j.Logger;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_CODE;
-import static com.maveric.accountservice.enums.Constants.BAD_REQUEST_CODE;
 @ControllerAdvice
 @RestControllerAdvice
 public class ExceptionControlAdvisor {
@@ -40,6 +24,7 @@ public class ExceptionControlAdvisor {
         errorDto.setMessage(exception.getMessage());
         return errorDto;
     }
+
 
     @ExceptionHandler(value
             = CustomerIDNotFoundExistsException.class)
@@ -91,6 +76,7 @@ public class ExceptionControlAdvisor {
         log.error("{}-{}",BAD_REQUEST_CODE,exception.getMessage());
         return errorDto;
     }
+
     @ExceptionHandler //for enum
     public ResponseEntity<ErrorReponseDto> invalidValueException(InvalidFormatException ex) {
 
@@ -103,5 +89,23 @@ public class ExceptionControlAdvisor {
             responseDto.setMessage(ex.getMessage());
         return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler({NoSuchCustomerExistsException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public final ErrorDto handleCustomerIDNotFoundExistsException(NoSuchCustomerExistsException exception) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(NOT_FOUND);
+        errorDto.setMessage(exception.getMessage());
+        return errorDto;
+    }
+
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    public final ErrorDto handleMessageNotReadableException() {
+//        ErrorDto errorDto = new ErrorDto();
+//        errorDto.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
+//        errorDto.setMessage("Type is mandatory - 'SAVINGS' or 'CURRENT'");
+//        return errorDto;
+//    }
 }
+
 

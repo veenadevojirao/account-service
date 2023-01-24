@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public
 class AccountServiceApplicationTests {
 
+
 	@Test
 	void testDoSomething() {  // Noncompliant
 		assertTrue(true);
@@ -39,7 +40,9 @@ class AccountServiceApplicationTests {
 				.type(Type.SAVINGS)
 				.build();
 	}
+
 	private Object any(Object accountDto) {
 		return accountDto;
 	}
+
 }

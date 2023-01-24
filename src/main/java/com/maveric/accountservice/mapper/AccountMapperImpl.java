@@ -3,6 +3,7 @@ package com.maveric.accountservice.mapper;
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 
+
 import org.springframework.http.MediaType;
 
 import org.springframework.stereotype.Component;
@@ -49,8 +50,7 @@ public class AccountMapperImpl implements AccountMapper{
     public List<AccountDto> mapToDto(List<Account> accounts) {
         return accounts.stream().map(account ->  AccountDto.builder()
 
-//    public List<AccountDto> mapToDto(List<Account> accounts) {
-//        return (MediaType) accounts.stream().map(account ->  AccountDto.builder()
+
 
                 ._id(account.get_id())
                 .customerId(account.getCustomerId())
@@ -65,5 +65,4 @@ public class AccountMapperImpl implements AccountMapper{
 
 
 
-//}
 
