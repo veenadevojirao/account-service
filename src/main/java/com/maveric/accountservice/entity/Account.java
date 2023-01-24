@@ -6,6 +6,8 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 @Getter
@@ -17,10 +19,14 @@ public class Account {
 
 
     private String _id;
+
     @NotNull(message = "Customer Id is mandatory")
     private String customerId;
 
+
+    @NotNull(message = "Type is mandatory - 'SAVINGS' or 'CURRENT'")
     private Type type;
+
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
@@ -31,7 +37,4 @@ public class Account {
     private Date updatedAt =new Date();
 
 
-//    public static Object builder() {
-//        return builder();
-//    }
 }

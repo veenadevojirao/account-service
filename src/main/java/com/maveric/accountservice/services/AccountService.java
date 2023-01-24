@@ -1,6 +1,7 @@
 package com.maveric.accountservice.services;
 
 import com.maveric.accountservice.dto.AccountDto;
+
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.exception.CustomerIDNotFoundExistsException;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -14,5 +15,13 @@ public interface AccountService {
     Account updateAccount(String customerId, String accountId, Account account) throws CustomerIDNotFoundExistsException;
 
     Object updateAccount(Object any);
+
+
+
+
+
+    public AccountDto createAccount(String customerId, AccountDto accountDto);
+
+
 }
 
