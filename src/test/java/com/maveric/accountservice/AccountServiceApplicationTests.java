@@ -39,4 +39,7 @@ class AccountServiceApplicationTests {
 				.type(Type.SAVINGS)
 				.build();
 	}
+	private Object any(Object accountDto) {
+		return accountDto;
+	}
 }

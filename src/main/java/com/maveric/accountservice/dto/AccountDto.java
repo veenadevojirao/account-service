@@ -16,12 +16,12 @@ import java.util.Date;
 @AllArgsConstructor
 public class AccountDto{
     private String _id;
-    @NotNull(message = "Type is mandatory - 'SAVINGS' or 'CURRENT'")
-    private Type type;
 
+    @Column(nullable = false, length = 512, unique = true)
     @NotBlank(message = "Customer Id is mandatory")
     private String customerId;
-
+    @NotNull(message = "Type is mandatory - 'SAVINGS' or 'CURRENT'")
+    private Type type;
 
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,6 +31,9 @@ public class AccountDto{
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = true)
     private Date updatedAt =new Date();
+
+
+    private BalanceDto balance;
 
 
 
