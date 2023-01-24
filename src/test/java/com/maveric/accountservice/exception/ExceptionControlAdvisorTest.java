@@ -1,11 +1,11 @@
 package com.maveric.accountservice.exception;
 
 import com.maveric.accountservice.dto.ErrorDto;
+import com.maveric.accountservice.dto.ErrorReponseDto;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.mockito.Mockito.mock;
 
 
 public class ExceptionControlAdvisorTest {
@@ -15,6 +15,37 @@ public class ExceptionControlAdvisorTest {
         AccountNotFoundException exception = new AccountNotFoundException("Account Not found");
         ErrorDto error = controlAdvisor.handleAccountNotFoundException(exception);
         assertEquals("404",error.getCode());
+    }
+
+
+    private ExceptionControlAdvisor controllerAdvisor = new ExceptionControlAdvisor();
+    @Test
+    void handleCustomerIdNotFoundException() {
+        CustomerIDNotFoundExistsException exception = new CustomerIDNotFoundExistsException("Customer Not found");
+        ErrorReponseDto error = controllerAdvisor.handleException(exception);
+        assertEquals("404",error.getCode());
+    }
+
+
+    @Test
+    void handleHttpRequestMethodNotSupportedException()
+    {
+        HttpMessageNotReadableException exception = new HttpMessageNotReadableException("Exception");
+        ErrorDto error = controllerAdvisor.handleMessageNotReadableException(exception);
+        assertEquals("400 BAD_REQUEST",error.getCode());
+    }
+
+    @Test
+    void handleCustomerNotFoundException() {
+        CustomerNotFoundException exception = new CustomerNotFoundException("Customer Not found");
+        ErrorDto error = controllerAdvisor.handleCustomerNotFoundException(exception);
+        assertEquals("404",error.getCode());
+    }
+    @Test
+    void handlePathParamsVsInputParamsMismatchException() {
+        PathParamsVsInputParamsMismatchException exception = new PathParamsVsInputParamsMismatchException("Input Not valid");
+        ErrorDto error = controllerAdvisor.handlePathParamsVsInputParamsMismatchException(exception);
+        assertEquals("400",error.getCode());
     }
 
 }
