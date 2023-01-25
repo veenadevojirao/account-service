@@ -3,10 +3,10 @@ package com.maveric.accountservice.mapper;
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
 
 @Component
 public class AccountMapperImpl implements AccountMapper{
@@ -46,11 +46,10 @@ public class AccountMapperImpl implements AccountMapper{
 
     @Override
 
+
+
     public List<AccountDto> mapToDto(List<Account> accounts) {
         return accounts.stream().map(account ->  AccountDto.builder()
-
-
-
 
 
                 ._id(account.get_id())
@@ -62,6 +61,15 @@ public class AccountMapperImpl implements AccountMapper{
         ).toList();
     }
 
+    @Override
+    public byte[] writeValueAsString(AccountDto accountDto) {
+        return new byte[0];
+    }
+
+
 }
+
+
+
 
 

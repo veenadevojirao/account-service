@@ -1,5 +1,6 @@
 package com.maveric.accountservice.exception;
 
+
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.maveric.accountservice.dto.ErrorDto;
 import com.maveric.accountservice.dto.ErrorReponseDto;
@@ -7,12 +8,14 @@ import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
-import static com.maveric.accountservice.enums.Constants.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.maveric.accountservice.enums.Constants.*;
-
 
 @ControllerAdvice
 @RestControllerAdvice
@@ -28,6 +31,32 @@ public class ExceptionControlAdvisor {
         return errorDto;
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public final ErrorDto handleMessageNotReadableException() {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
+        errorDto.setMessage("Type should be either 'CUREENT' or 'SAVINGS'");
+        return errorDto;
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(BAD_REQUEST_CODE);
+        errorDto.setMessage(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        return errorDto;
+    }
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ErrorDto handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException ex) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(METHOD_NOT_ALLOWED_CODE);
+        errorDto.setMessage(METHOD_NOT_ALLOWED_MESSAGE);
+        return errorDto;
+    }
+
     @ExceptionHandler({CustomerIDNotFoundExistsException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public final ErrorDto handleCustomerIDNotFoundExistsException(CustomerIDNotFoundExistsException exception) {
@@ -38,7 +67,11 @@ public class ExceptionControlAdvisor {
     }
 
 
-//    @ExceptionHandler(value
+
+
+
+
+//   @ExceptionHandler(value
 //            = CustomerIDNotFoundExistsException.class)
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
 //    public @ResponseBody ErrorReponseDto
@@ -50,14 +83,14 @@ public class ExceptionControlAdvisor {
 //        return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST).getBody();
 //
 //    }
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public final ErrorDto handleMessageNotReadableException(HttpMessageNotReadableException exception) {
-
-        ErrorDto errorDto = new ErrorDto();
-        errorDto.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
-        errorDto.setMessage("Type is mandatory - 'SAVINGS' or 'CURRENT'");
-        return errorDto;
-    }
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    public final ErrorDto handleMessageNotReadableException(HttpMessageNotReadableException exception) {
+//
+//        ErrorDto errorDto = new ErrorDto();
+//        errorDto.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
+//        errorDto.setMessage("Type is mandatory - 'SAVINGS' or 'CURRENT'");
+//        return errorDto;
+//    }
 
 
     @ExceptionHandler(CustomerNotFoundException.class)
@@ -71,15 +104,15 @@ public class ExceptionControlAdvisor {
     }
 
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDto handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        ErrorDto errorDto = new ErrorDto();
-        errorDto.setCode(BAD_REQUEST_CODE);
-        errorDto.setMessage(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-        return errorDto;
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ErrorDto handleValidationExceptions(
+//            MethodArgumentNotValidException ex) {
+//        ErrorDto errorDto = new ErrorDto();
+//        errorDto.setCode(BAD_REQUEST_CODE);
+//        errorDto.setMessage(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+//        return errorDto;
+//    }
 
 
 
@@ -106,14 +139,14 @@ public class ExceptionControlAdvisor {
         return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({NoSuchCustomerExistsException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public final ErrorDto handleCustomerIDNotFoundExistsException(NoSuchCustomerExistsException exception) {
-        ErrorDto errorDto = new ErrorDto();
-        errorDto.setCode(NOT_FOUND);
-        errorDto.setMessage(exception.getMessage());
-        return errorDto;
-    }
+//    @ExceptionHandler({NoSuchCustomerExistsException.class})
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    public final ErrorDto handleCustomerIDNotFoundExistsException(NoSuchCustomerExistsException exception) {
+//        ErrorDto errorDto = new ErrorDto();
+//        errorDto.setCode(NOT_FOUND);
+//        errorDto.setMessage(exception.getMessage());
+//        return errorDto;
+//    }
 
 //    @ExceptionHandler(HttpMessageNotReadableException.class)
 //    public final ErrorDto handleMessageNotReadableException() {
@@ -123,4 +156,5 @@ public class ExceptionControlAdvisor {
 //        return errorDto;
 //    }
 }
+
 

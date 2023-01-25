@@ -1,14 +1,12 @@
 package com.maveric.accountservice.controller;
-import com.maveric.accountservice.dto.AccountDto;
-import com.maveric.accountservice.dto.BalanceDto;
-import com.maveric.accountservice.entity.Account;
-import com.maveric.accountservice.services.AccountService;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.dto.BalanceDto;
 import com.maveric.accountservice.enums.Type;
+import com.maveric.accountservice.mapper.AccountMapper;
+import com.maveric.accountservice.repository.AccountRepository;
 import com.maveric.accountservice.services.AccountService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,32 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static com.maveric.accountservice.AccountServiceApplicationTests.getAccount;
-import static com.maveric.accountservice.AccountServiceApplicationTests.getAccountDto;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Optional;
 
 import static com.maveric.accountservice.enums.Constants.ACCOUNT_DELETED_SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,11 +43,26 @@ public class AccountControllerTest {
 
     @MockBean
     private AccountService accountService;
-
-
-
     @Mock
     ResponseEntity<BalanceDto> balanceDto;
+
+    @Autowired
+    ObjectMapper mapper;
+
+
+    @Test
+    public void shouldGetStatus200WhenRequestMadeToGetAccountDetails() throws Exception
+    {
+        when(accountService.getAccountByAccId(any(String.class),any(String.class))).thenReturn(Optional.empty());
+
+
+        mock.perform(get("/api/v1/customers/1/accounts/1").header("userId","1"))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+
+
 
     @Test
     public void getAccounts() throws Exception
@@ -80,8 +81,7 @@ public class AccountControllerTest {
 
 
     }
-    @Autowired
-    ObjectMapper mapper;
+
     @Test
     void deleteAccounts() throws Exception {
         ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(getAccountDto(), HttpStatus.OK);
@@ -95,15 +95,14 @@ public class AccountControllerTest {
         ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(HttpStatus.OK);
         Object AccountDto = new Object();
         when(accountService.updateAccount(any())).thenReturn(getAccountDto());
-        mock.perform(MockMvcRequestBuilders.put("/api/v1/customers/1/accounts/1235")
+        mock.perform(MockMvcRequestBuilders.put("/api/v1/customers/1234/accounts/1234")
                         .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(getAccountDto())))
-
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
 
-@Test
+    @Test
     void createAccounts() throws Exception{
         ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(getAccountDto(), HttpStatus.OK);
         when(accountService.createAccount(any(), any(AccountDto.class))).thenReturn(getAccountDto());
@@ -114,7 +113,6 @@ public class AccountControllerTest {
     }
 
 
-
     public AccountDto getAccountDto(){
         AccountDto accountDto=new AccountDto();
         accountDto.setCustomerId("1");
@@ -122,8 +120,6 @@ public class AccountControllerTest {
         accountDto.set_id("1");
         return accountDto;
     }
-
-
 
     @Test
     public void nottodeleteAccount() throws Exception
@@ -166,3 +162,4 @@ public class AccountControllerTest {
 
 
 }
+

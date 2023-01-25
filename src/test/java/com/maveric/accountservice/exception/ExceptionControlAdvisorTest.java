@@ -1,15 +1,14 @@
 package com.maveric.accountservice.exception;
 
 import com.maveric.accountservice.dto.ErrorDto;
-import com.maveric.accountservice.dto.ErrorReponseDto;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ExceptionControlAdvisorTest {
-    private ExceptionControlAdvisor controllerAdvisor = new ExceptionControlAdvisor();
+    private  ExceptionControlAdvisor controllerAdvisor = new ExceptionControlAdvisor();
+
     @Test
     void CustomerIDNotFoundExistsException() {
         CustomerIDNotFoundExistsException exception = new CustomerIDNotFoundExistsException("Customer ID Not found");
@@ -23,6 +22,14 @@ public class ExceptionControlAdvisorTest {
         ErrorDto error = controllerAdvisor.handleAccountNotFoundException(exception);
         assertEquals("404",error.getCode());
     }
+
+    @Test
+    void handleCustomerIDNotFoundExistsException() {
+        CustomerIDNotFoundExistsException exception = new CustomerIDNotFoundExistsException("Customer Not found");
+        ErrorDto error = controllerAdvisor.handleCustomerIDNotFoundExistsException(exception);
+        assertEquals("Nosuch customerId is present!",error.getCode());
+    }
+
 
 
 
@@ -38,7 +45,7 @@ public class ExceptionControlAdvisorTest {
     void handleHttpRequestMethodNotSupportedException()
     {
         HttpMessageNotReadableException exception = new HttpMessageNotReadableException("Exception");
-        ErrorDto error = controllerAdvisor.handleMessageNotReadableException(exception);
+        ErrorDto error = controllerAdvisor.handleMessageNotReadableException();
         assertEquals("400 BAD_REQUEST",error.getCode());
     }
 

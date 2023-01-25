@@ -43,6 +43,14 @@ public class AccountServiceImplTest {
     private Page pageResult;
     @Test
 
+    void getAccountDetailsById() throws AccountNotFoundException {
+        when(repository.findById(any(String.class))).thenReturn(Optional.empty());
+        assertThrows(AccountNotFoundException.class,()->{
+            service.getAccountByAccId("1","1");
+        });
+    }
+
+@Test
     public void testGetAccounts() {
         Page<Account> pagedResponse = new PageImpl(Arrays.asList(getAccount(),getAccount()));
         when(repository.findByCustomerId(any(Pageable.class),any())).thenReturn(pagedResponse);
@@ -54,7 +62,7 @@ public class AccountServiceImplTest {
 
 
 
-@Test
+    @Test
 
     void updateAccountDetails() {
 

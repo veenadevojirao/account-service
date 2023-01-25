@@ -1,14 +1,12 @@
 package com.maveric.accountservice.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
-@AllArgsConstructor
+@Setter
+@NoArgsConstructor
 
 public class BalanceDto {
     private String  _id;
