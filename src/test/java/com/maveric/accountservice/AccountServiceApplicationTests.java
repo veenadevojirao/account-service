@@ -13,11 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public
 class AccountServiceApplicationTests {
 
-	@Test
-	void testDoSomething() {  // Noncompliant
-		assertTrue(true);
-	}
-
 	public static String asJsonString(final Object obj) {
 		try {
 			return new ObjectMapper().writeValueAsString(obj);
@@ -25,20 +20,31 @@ class AccountServiceApplicationTests {
 			throw new RuntimeException(e);
 		}
 	}
-	public static Account getAccount()
-	{
-		return  Account.builder()
-				.customerId("1234")
-				.type(Type.SAVINGS)
-				.build();
-	}
-	public static AccountDto getAccountDto()
-	{
-		return  AccountDto.builder()
-				.customerId("1234")
-				.type(Type.SAVINGS)
-				.build();
+	@Test
+	void testDoSomething() {  // Noncompliant
+		assertTrue(true);
+
 	}
 
 
-}
+		public static Account getAccount ()
+		{
+			return Account.builder()
+					.customerId("1234")
+					.type(Type.SAVINGS)
+					.build();
+		}
+		public static AccountDto getAccountDto ()
+		{
+			return AccountDto.builder()
+					.customerId("1234")
+					.type(Type.CURRENT)
+					.build();
+		}
+
+
+
+		}
+
+
+

@@ -14,8 +14,10 @@ import static com.maveric.accountservice.AccountServiceApplicationTests.getAccou
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+
 @DataMongoTest
 //@RunWith(SpringRunner.class)
+
 public class AccountRepositoryTest {
     @Autowired
     AccountRepository repository;
@@ -28,4 +30,14 @@ public class AccountRepositoryTest {
     }
 
 
+    @Test
+
+    public void testFindAll() {
+        List<Account> account = repository.findAll();
+        assertNotNull(account);
+        assert(account.size()>0);
+    }
+
 }
+
+

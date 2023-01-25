@@ -2,21 +2,24 @@ package com.maveric.accountservice.dto;
 
 import com.maveric.accountservice.enums.Type;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.Column;
+
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
+
 @AllArgsConstructor(access= AccessLevel.PUBLIC)
 
 public class AccountDto {
-    @Id
 
     private String _id;
 
@@ -27,9 +30,17 @@ public class AccountDto {
     private Type type;
 
 
-//    private String Balance;
-    private Date createdAt;
-    private Date updatedAt;
-//private  String Balance;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = false)
+    private Date createdAt=new Date();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = true)
+    private Date updatedAt =new Date();
+    private String Balance;
+    private BalanceDto balance;
+
+
 
 }
+

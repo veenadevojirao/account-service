@@ -6,6 +6,9 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
+//@Mapper(componentModel="Account")
+
+
 public interface AccountMapper {
     Account map(AccountDto accountDto);
 
@@ -13,5 +16,14 @@ public interface AccountMapper {
 
     List<Account> mapToModel (List<AccountDto> accounts);
 
-    MediaType mapToDto(List<Account> accounts);
+
+//    MediaType mapToDto(List<Account> accounts);
+
+
+
+    List<AccountDto> mapToDto (List<Account> accounts);
+
+    byte[] writeValueAsString(AccountDto accountDto);
 }
+
+
