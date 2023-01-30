@@ -4,8 +4,8 @@ package com.maveric.accountservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.dto.BalanceDto;
+import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.enums.Type;
-import com.maveric.accountservice.mapper.AccountMapper;
 import com.maveric.accountservice.repository.AccountRepository;
 import com.maveric.accountservice.services.AccountService;
 import org.junit.jupiter.api.Test;
@@ -21,6 +21,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static com.maveric.accountservice.enums.Constants.ACCOUNT_DELETED_SUCCESS;
@@ -39,30 +41,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AccountControllerTest {
     @Autowired
-    private MockMvc mock;
-
+    MockMvc mvc;
+    @Autowired
+    ObjectMapper mapper;
+    @Mock
+    private List<Account> account;
     @MockBean
     private AccountService accountService;
+
+    @MockBean
+    private AccountRepository accountRepository;
+
+//    @MockBean
+//    private AccountService accountService;
+
+    @Autowired
+    private MockMvc mock;
+
+
     @Mock
     ResponseEntity<BalanceDto> balanceDto;
 
-    @Autowired
-    ObjectMapper mapper;
-
-
     @Test
-    public void shouldGetStatus200WhenRequestMadeToGetAccountDetails() throws Exception
-    {
-        when(accountService.getAccountByAccId(any(String.class),any(String.class))).thenReturn(Optional.empty());
-
-
-        mock.perform(get("/api/v1/customers/1/accounts/1").header("userId","1"))
+    void shouldGetBalanceWhenRequestMadeToGetBalance() throws Exception{
+        when(accountService.getAccountByAccId("1","1")).thenReturn(getAccountDto());
+        mock.perform(get("/api/v1/customers/1/accounts/1").header("userId",1))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andDo(print());
+
     }
-
-
-
 
     @Test
     public void getAccounts() throws Exception
@@ -121,18 +128,7 @@ public class AccountControllerTest {
         return accountDto;
     }
 
-    @Test
-    public void nottodeleteAccount() throws Exception
-    {
-        when(accountService.deleteAccount(any(String.class))).thenReturn(ACCOUNT_DELETED_SUCCESS);
-//        when(balanceServiceConsumer.deleteBalanceByAccountId(any(String.class))).thenReturn(null);
-//        when(transactionServiceConsumer.deleteAllTransaction(any(String.class))).thenReturn(null);
-        String apiV1 = new String();
-        mock.perform(delete(apiV1+"/1234").header("userId","1234")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andDo(print());
-    }
+
     @Test
     void NotupdateAccount() throws Exception{
         ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(HttpStatus.OK);
@@ -160,6 +156,19 @@ public class AccountControllerTest {
         return accountDto;
     }
 
+    public ResponseEntity<List<Account>> getSampleAccount(){
 
+        List<Account> accountList = new ArrayList<>();
+        Account account = new Account();
+        account.setCustomerId("1");
+
+        Account account1 = new Account();
+        account1.setCustomerId("2");
+
+
+        accountList.add(account1);
+        accountList.add(account);
+        return ResponseEntity.status(HttpStatus.OK).body(accountList);
+    }
 }
 

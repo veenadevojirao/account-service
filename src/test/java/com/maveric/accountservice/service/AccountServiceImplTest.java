@@ -2,6 +2,7 @@ package com.maveric.accountservice.service;
 
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
+import com.maveric.accountservice.exception.AccountIDNotfoundException;
 import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.exception.PathParamsVsInputParamsMismatchException;
 import com.maveric.accountservice.mapper.AccountMapperImpl;
@@ -94,22 +95,20 @@ public class AccountServiceImplTest {
     @Test
     void createAccount_failure() {
         Throwable error = assertThrows(PathParamsVsInputParamsMismatchException.class,()->service.createAccount("1233",getAccountDto()));  //NOSONAR
-        assertEquals("Customer Id-1234 not found. Cannot create account.",error.getMessage());
+        assertEquals("Customer Id-1234Missmatch",error.getMessage());
     }
     @Test
     void deleteAccount() {
         when(repository.findById("123")).thenReturn(Optional.of(getAccount()));
-        willDoNothing().given(repository).deleteById("123");
+        String accounDto = service.deleteAccount("123","1234");
 
-        String accounDto = service.deleteAccount("123");
-
-        assertSame( "Account deleted successfully.",accounDto);
+        assertSame( "Account deleted sucessfully",accounDto);
 
     }
     @Test
     void deleteAccount_failure() {
-        Throwable error = assertThrows(AccountNotFoundException.class,()->service.deleteAccount("1234"));
-        assertEquals("Account not found for Id-1234",error.getMessage());
+        Throwable error = assertThrows(AccountIDNotfoundException.class,()->service.deleteAccount("1234","1234"));
+        assertEquals("Account ID not available",error.getMessage());
     }
 
 }
