@@ -51,7 +51,7 @@ public class AccountServiceImplTest {
         });
     }
 
-@Test
+    @Test
     public void testGetAccounts() {
         Page<Account> pagedResponse = new PageImpl(Arrays.asList(getAccount(),getAccount()));
         when(repository.findByCustomerId(any(Pageable.class),any())).thenReturn(pagedResponse);
@@ -59,10 +59,6 @@ public class AccountServiceImplTest {
         List<AccountDto> accountDtos= service.getAccountByUserId(1, 2,"1");
         assertTrue(accountDtos.size()==2);
     }
-
-
-
-
     @Test
 
     void updateAccountDetails() {

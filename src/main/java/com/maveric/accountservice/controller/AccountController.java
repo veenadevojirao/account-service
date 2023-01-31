@@ -39,16 +39,13 @@ public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
 
-    //    private AccountService accountService;
+
     @GetMapping("customers/{customerId}/accounts/{accountId}")
     public AccountDto getAccount(@PathVariable("customerId") String customerId, @Valid
     @PathVariable("accountId") String accountId) throws AccountNotFoundException ,CustomerIDNotFoundExistsException{
          AccountDto accounts=accountService.getAccountByAccId(customerId,accountId);
          return accounts;
     }
-
-
-
     @PutMapping("customers/{customerId}/accounts/{accountId}")
     public ResponseEntity<Account> updateAccount(@PathVariable(name = "customerId") String customerId, @Valid @PathVariable(name = "accountId") String accountId, @RequestBody Account account) {
         Account AccountDto = accountService.updateAccount(customerId, accountId, account);

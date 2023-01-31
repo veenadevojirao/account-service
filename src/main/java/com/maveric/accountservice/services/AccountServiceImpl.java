@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_MESSAGE;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -44,6 +43,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public List<Account> getAccountById(String customerId) {
+        return getAccountById("1");
+    }
+
+    @Override
     public String deleteAccount(String accountId,String customerId) throws AccountNotFoundException,CustomerIdMissmatchException{
         Account account = accountRepository.findById(accountId).orElseThrow(
                 () -> new AccountIDNotfoundException("Account ID not available")
@@ -61,7 +65,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account updateAccount(String customerId, String accountId, Account account) {
         Account accountResult = accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE + accountId));
-//        accountResult=accountRepository.findById(customerId).orElseThrow(()-> new CustomerIDNotFoundExistsException(BAD_REQUEST_MESSAGE+customerId);
         if (!customerId.equals(account.getCustomerId())) {
             throw new CustomerIDNotFoundExistsException("Customer Id should not be empty");
         }
@@ -74,7 +77,6 @@ public class AccountServiceImpl implements AccountService {
         accountResult.setCreatedAt(accountResult.getCreatedAt());
         accountResult.setUpdatedAt(account.getUpdatedAt());
         Account accountUpdated = accountRepository.save(accountResult);
-//        return mapper.map(accountUpdated);
         return accountRepository.save(accountUpdated);
     }
 
@@ -104,14 +106,14 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
+
+
+
     @Override
     public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String customerId) throws
             CustomerIdMissmatchException {
         Pageable paging = PageRequest.of(page, pageSize);
         Page<Account> pageResult = accountRepository.findByCustomerId(paging, customerId);
-//        if(!customerId.equals(accountRepository.findByCustomerId(paging,customerId))){
-//            throw new CustomerIDNotFoundExistsException("Customer Id should not be empty");
-//        }
         if (pageResult.hasContent()) {
             List<Account> account = pageResult.getContent();
             log.info("Retrieved list of accounts from DB");
@@ -123,10 +125,7 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
-    public List<Account> getAccountById(String customerId) {
-        return null;
 
-    }
 
 }
 

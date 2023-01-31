@@ -19,7 +19,7 @@ import java.util.List;
 public interface AccountService {
 
     AccountDto getAccountByAccId(String customerId, String accountId) throws AccountNotFoundException,CustomerIDNotFoundExistsException;
-//    Optional<Account> getAccountByCusId(String customerId, String accountId) throws AccountIDNotfoundException;
+
 
 
     List<Account> getAccountById(String customerId);
@@ -34,6 +34,7 @@ public interface AccountService {
 
 
     public AccountDto createAccount(String customerId, AccountDto accountDto);
+
 
 }
 

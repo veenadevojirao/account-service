@@ -82,7 +82,6 @@ public class AccountControllerTest {
     }
     @Test
     public void notgetAccounts() throws Exception {
-//        String invalidApiV1 = new String();
         mock.perform(get("/api/v1/customers/12346/accounts")
                 .contentType(MediaType.APPLICATION_JSON));
 
