@@ -10,13 +10,11 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.maveric.accountservice.enums.Constants.*;
-//import static org.springframework.data.mongodb.repository.support.SpringDataMongodbQuery.handleException;
-
 
 
 @RestControllerAdvice
@@ -66,69 +64,8 @@ public class GlobalExceptionHandler {
         errorDto.setMessage(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return errorDto;
     }
-
-
-
-
-
-    //        @ExceptionHandler(AccountNotFoundException.class)
-//        public ResponseEntity<ErrorReponseDto> handllingException(AccountNotFoundException ex) {
-//            ErrorReponseDto response = new ErrorReponseDto();
-//            response.setCode("404");
-//            response.setMessage(ex.getMessage());
-//            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-//
-//        }
-
-
-
-        //    private static final Logger log = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
-//        @ExceptionHandler(AccountNotFoundException.class)
-//        @ResponseStatus(HttpStatus.NOT_FOUND)
-//        public final ErrorDto handleAccountNotFoundException (AccountNotFoundException exception){
-//            ErrorDto errorDto = new ErrorDto();
-//            errorDto.setCode(ACCOUNT_NOT_FOUND_CODE);
-//            errorDto.setMessage(exception.getMessage());
-//            return errorDto;
-//        }
-
-//        @ExceptionHandler(value
-//                = CustomerIDNotFoundExistsException.class)
-//        @ResponseStatus(HttpStatus.BAD_REQUEST)
-//        public @ResponseBody ErrorReponseDto
-//        handleException(CustomerIDNotFoundExistsException ex)
-//
-//        {
-//            ErrorReponseDto response = new ErrorReponseDto();
-//            response.setCode("404");
-//            response.setMessage(ex.getMessage());
-//            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST).getBody();
-//
-//        }
-//    @ExceptionHandler //for enum
-//    public ResponseEntity<ErrorReponseDto> invalidValueException(InvalidFormatException ex) {
-//
-//        //HttpMessageNotReadableException.
-//        ErrorReponseDto responseDto = new ErrorReponseDto();
-//        responseDto.setCode("400");
-//        if (ex.getMessage().contains("enum")) {
-//            responseDto.setMessage("Cannot have values other than enum [SAVINGS,CURRENT]");
-//        } else
-//            responseDto.setMessage(ex.getMessage());
-//        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
-//    }
-//        @ExceptionHandler({NoSuchCustomerExistsException.class})
-//        @ResponseStatus(HttpStatus.NOT_FOUND)
-//        public final ErrorDto handleCustomerIDNotFoundExistsException (NoSuchCustomerExistsException exception){
-//
-//            ErrorDto errorDto = new ErrorDto();
-//            errorDto.setCode(NOT_FOUND);
-//            errorDto.setMessage(exception.getMessage());
-//            return errorDto;
-//        }
-
-        @ExceptionHandler(CustomerIdMissmatch.class)
-        public ResponseEntity<ErrorReponseDto> handllingException (CustomerIdMissmatch ex){
+    @ExceptionHandler(CustomerIdMissmatchException.class)
+        public ResponseEntity<ErrorReponseDto> handllingException (CustomerIdMissmatchException ex){
             ErrorReponseDto response = new ErrorReponseDto();
             response.setCode("400");
             response.setMessage(ex.getMessage());

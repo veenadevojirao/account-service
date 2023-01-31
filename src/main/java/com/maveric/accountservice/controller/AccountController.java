@@ -2,7 +2,10 @@ package com.maveric.accountservice.controller;
 
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
+import com.maveric.accountservice.exception.AccountIDNotfoundException;
 import com.maveric.accountservice.exception.AccountNotFoundException;
+import com.maveric.accountservice.exception.CustomerIDNotFoundExistsException;
+import com.maveric.accountservice.repository.AccountRepository;
 import com.maveric.accountservice.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,21 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 
-import com.maveric.accountservice.exception.CustomerIdMissmatch;
+import com.maveric.accountservice.exception.CustomerIdMissmatchException;
 
-import com.maveric.accountservice.entity.Account;
-
-import com.maveric.accountservice.services.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+
 
 import java.util.List;
 
@@ -38,19 +36,16 @@ public class AccountController {
     @Autowired
 
     AccountService accountService;
-//    private AccountService accountService;
+    @Autowired
+    private AccountRepository accountRepository;
+
+
     @GetMapping("customers/{customerId}/accounts/{accountId}")
-    public Optional<Account> getAccount(@PathVariable("customerId") String customerId, @Valid
-    @PathVariable("accountId") String accountId) throws AccountNotFoundException {
-        Optional<Account> accounts=accountService.getAccountByAccId(customerId,accountId);
-
-
-        return accounts;
-
+    public AccountDto getAccount(@PathVariable("customerId") String customerId, @Valid
+    @PathVariable("accountId") String accountId) throws AccountNotFoundException ,CustomerIDNotFoundExistsException{
+         AccountDto accounts=accountService.getAccountByAccId(customerId,accountId);
+         return accounts;
     }
-
-
-
     @PutMapping("customers/{customerId}/accounts/{accountId}")
     public ResponseEntity<Account> updateAccount(@PathVariable(name = "customerId") String customerId, @Valid @PathVariable(name = "accountId") String accountId, @RequestBody Account account) {
         Account AccountDto = accountService.updateAccount(customerId, accountId, account);
@@ -68,23 +63,27 @@ public class AccountController {
 
     @GetMapping("customers/{customerId}/accounts")
     public ResponseEntity<List<AccountDto>> getAccountByCustomerId(@PathVariable String customerId, @Valid @RequestParam(defaultValue = "0") Integer page,
-                                                                   @RequestParam(defaultValue = "10") @Valid Integer pageSize)throws CustomerIdMissmatch {
+                                                                   @RequestParam(defaultValue = "10") @Valid Integer pageSize)throws CustomerIdMissmatchException {
 List<AccountDto> accountDtoResponse = accountService.getAccountByUserId(page, pageSize, customerId);
         return new ResponseEntity<>(accountDtoResponse, HttpStatus.OK);
 
     }
 
     @DeleteMapping("customers/{customerId}/accounts/{accountId}")
-    public ResponseEntity<AccountDto> deleteAccount(@PathVariable("customerId") String customerId,@Valid
-    @PathVariable("accountId") String accountId){
-        String AccountDto=accountService.deleteAccount(accountId);
-        HttpHeaders responseHeaders = new HttpHeaders();
+    public ResponseEntity<String> deleteAccount(@PathVariable String customerId,@Valid
+                                                @PathVariable String accountId) throws AccountNotFoundException,CustomerIdMissmatchException{
 
-        responseHeaders.add("message",
-                "account deleted sucessfully");
-        return new ResponseEntity<AccountDto>(HttpStatus.OK);
+        String result = accountService.deleteAccount(accountId,customerId);
 
+        if(result!=null) {
+
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(accountId+"AccountIdNotFound", HttpStatus.NOT_FOUND);
+        }
     }
+
 
     @PostMapping("customers/{customerId}/accounts")
     public ResponseEntity<AccountDto> createAccount (@PathVariable String customerId, @Valid @RequestBody AccountDto

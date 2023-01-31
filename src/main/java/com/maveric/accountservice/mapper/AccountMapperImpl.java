@@ -3,7 +3,6 @@ package com.maveric.accountservice.mapper;
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
 
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
