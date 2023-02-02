@@ -47,13 +47,7 @@ public class GlobalExceptionHandler {
         errorDto.setMessage(exception.getMessage());
         return errorDto;
     }
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public final ErrorDto handleMessageNotReadableException() {
-        ErrorDto errorDto = new ErrorDto();
-        errorDto.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
-        errorDto.setMessage("Type is mandatory - 'SAVINGS' or 'CURRENT'");
-        return errorDto;
-    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

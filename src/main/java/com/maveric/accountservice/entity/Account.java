@@ -28,12 +28,7 @@ public class Account {
 
     @NotBlank(message = "Customer Id is mandatory")
     private String customerId;
-    @NotNull(message = "Type is mandatory - 'SAVINGS' or 'CURRENT'")
     private Type type;
-
-
-    private String Balance;
-
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)

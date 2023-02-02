@@ -19,9 +19,6 @@ import java.util.List;
 public interface AccountService {
 
     AccountDto getAccountByAccId(String customerId, String accountId) throws AccountNotFoundException,CustomerIDNotFoundExistsException;
-
-
-
     List<Account> getAccountById(String customerId);
     public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String customerId)throws CustomerIdMissmatchException;
 
@@ -36,6 +33,7 @@ public interface AccountService {
     public AccountDto createAccount(String customerId, AccountDto accountDto);
 
 
+    List<AccountDto> getAccountsById(String customerId);
 }
 
 

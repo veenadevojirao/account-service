@@ -1,4 +1,5 @@
 package com.maveric.accountservice.enums;
 
-public class Currency {
+public enum Currency {
+    INR, DOLLAR, EURO
 }
