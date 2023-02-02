@@ -2,7 +2,10 @@ package com.maveric.accountservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maveric.accountservice.dto.AccountDto;
+import com.maveric.accountservice.dto.BalanceDto;
+import com.maveric.accountservice.dto.UserDto;
 import com.maveric.accountservice.entity.Account;
+import com.maveric.accountservice.enums.Currency;
 import com.maveric.accountservice.enums.Type;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public
 class AccountServiceApplicationTests {
-
+	public static final String apiV1 = "/api/v1/customers/1/accounts";
 	public static String asJsonString(final Object obj) {
 		try {
 			return new ObjectMapper().writeValueAsString(obj);
@@ -41,7 +44,21 @@ class AccountServiceApplicationTests {
 					.type(Type.CURRENT)
 					.build();
 		}
-
+	public static BalanceDto getBalanceDto()
+	{
+		return BalanceDto.builder()
+				.accountId("1234")
+				.amount(1000)
+				.currency(Currency.valueOf("INR"))
+				.build();
+	}
+	public static UserDto getUserDto()
+	{
+		return UserDto.builder()
+				.email("maveric@gmail.com")
+				._id("1234")
+				.build();
+	}
 
 
 		}

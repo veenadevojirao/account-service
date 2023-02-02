@@ -39,9 +39,6 @@ public class AccountMapperImplTest {
         assertEquals(0,account.size());
     }
 
-
-
-
     @Test
     void mapToDto() {
         List<AccountDto> accountDto = accountMapper.mapToDto(Arrays.asList(getAccount(),getAccount()));

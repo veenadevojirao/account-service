@@ -4,6 +4,7 @@ package com.maveric.accountservice.exception;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.maveric.accountservice.dto.ErrorDto;
 import com.maveric.accountservice.dto.ErrorReponseDto;
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +33,6 @@ public class ExceptionControlAdvisor {
         return errorDto;
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public final ErrorDto handleMessageNotReadableException() {
-        ErrorDto errorDto = new ErrorDto();
-        errorDto.setCode(String.valueOf(HttpStatus.BAD_REQUEST));
-        errorDto.setMessage("Type should be either 'CUREENT' or 'SAVINGS'");
-        return errorDto;
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -57,6 +51,14 @@ public class ExceptionControlAdvisor {
         ErrorDto errorDto = new ErrorDto();
         errorDto.setCode(METHOD_NOT_ALLOWED_CODE);
         errorDto.setMessage(METHOD_NOT_ALLOWED_MESSAGE);
+        return errorDto;
+    }
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public final ErrorDto handleMissingRequestHeaderException(MissingRequestHeaderException exception) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setCode(BAD_REQUEST_CODE);
+        errorDto.setMessage(exception.getMessage());
         return errorDto;
     }
 
@@ -103,5 +105,8 @@ public class ExceptionControlAdvisor {
             responseDto.setMessage(ex.getMessage());
         return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
+
+
+
 }
 

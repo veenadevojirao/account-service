@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import static com.maveric.accountservice.enums.Constants.ACCOUNT_DELETED_SUCCESS;
 import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_MESSAGE;
 
 import java.util.List;
@@ -57,7 +58,8 @@ public class AccountServiceImpl implements AccountService {
         } else {
             throw new CustomerIdMissmatchException("Customer ID not available");
         }
-        return "Account deleted sucessfully";
+
+        return ACCOUNT_DELETED_SUCCESS;
 
 
     }
@@ -66,7 +68,7 @@ public class AccountServiceImpl implements AccountService {
     public Account updateAccount(String customerId, String accountId, Account account) {
         Account accountResult = accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE + accountId));
         if (!customerId.equals(account.getCustomerId())) {
-            throw new CustomerIDNotFoundExistsException("Customer Id should not be empty");
+            throw new CustomerIDNotFoundExistsException("Customer Id Mismatch");
         }
 
         accountResult.set_id(accountResult.get_id());
@@ -84,13 +86,6 @@ public class AccountServiceImpl implements AccountService {
     public Object updateAccount(Object any) {
         return any;
     }
-
-
-    public AccountDto updateAccount(String customerId, String accountId, AccountDto accountDto) {
-        return accountDto;
-    }
-
-
     @Override
     public AccountDto createAccount(String customerId, AccountDto accountDto) {
         if (customerId.equalsIgnoreCase(accountDto.getCustomerId())) {
@@ -100,13 +95,16 @@ public class AccountServiceImpl implements AccountService {
             Account accountResult = accountRepository.save(account);
             return mapper.map(accountResult);
         } else {
-            log.error("Customer not found! Cannot create Account.");
-            throw new PathParamsVsInputParamsMismatchException("Customer Id-" + accountDto.getCustomerId()  +  "Missmatch");
+            log.error("CustomerId not found! Cannot create Account.");
+            throw new PathParamsVsInputParamsMismatchException("Customer Id-" + accountDto.getCustomerId()  +  "Mismatch");
         }
 
     }
 
-
+    @Override
+    public List<AccountDto> getAccountsById(String customerId) {
+        return getAccountsById("1");
+    }
 
 
     @Override
@@ -119,13 +117,13 @@ public class AccountServiceImpl implements AccountService {
             log.info("Retrieved list of accounts from DB");
             return mapper.mapToDto(account);
         } else {
-            throw new CustomerIdMissmatchException("Customer Id Missmatch");
+            throw new CustomerIdMissmatchException("Customer Id Mismatch");
 
         }
 
     }
-
-
-
+    public AccountDto updateAccount(String customerId, String accountId, AccountDto accountDto) {
+    return accountDto;
+    }
 }
 
