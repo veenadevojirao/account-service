@@ -55,11 +55,13 @@ public class AccountServiceImpl implements AccountService {
         );
         if (customerId.equals(account.getCustomerId())) {
             accountRepository.deleteById(accountId);
+            return "Account deleted sucessfully";
         } else {
             throw new CustomerIdMissmatchException("Customer ID not available");
         }
 
-        return ACCOUNT_DELETED_SUCCESS;
+
+
 
 
     }
@@ -68,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
     public Account updateAccount(String customerId, String accountId, Account account) {
         Account accountResult = accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException(ACCOUNT_NOT_FOUND_MESSAGE + accountId));
         if (!customerId.equals(account.getCustomerId())) {
-            throw new CustomerIDNotFoundExistsException("Customer Id Mismatch");
+            throw new CustomerIDNotFoundExistsException("Customer Id should be Mandatory");
         }
 
         accountResult.set_id(accountResult.get_id());
@@ -96,7 +98,7 @@ public class AccountServiceImpl implements AccountService {
             return mapper.map(accountResult);
         } else {
             log.error("CustomerId not found! Cannot create Account.");
-            throw new PathParamsVsInputParamsMismatchException("Customer Id-" + accountDto.getCustomerId()  +  "Mismatch");
+            throw new PathParamsVsInputParamsMismatchException("Customer Id Mismatch");
         }
 
     }
@@ -117,7 +119,7 @@ public class AccountServiceImpl implements AccountService {
             log.info("Retrieved list of accounts from DB");
             return mapper.mapToDto(account);
         } else {
-            throw new CustomerIdMissmatchException("Customer Id Mismatch");
+            throw new CustomerIdMissmatchException("Account Details not found for this CustomerId");
 
         }
 

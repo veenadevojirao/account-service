@@ -3,7 +3,7 @@ package com.maveric.accountservice.enums;
 import java.time.LocalDateTime;
 
 public class Constants {
-    private Constants()
+    public Constants(String accountNotFoundCode)
     {
 
     }
@@ -13,6 +13,7 @@ public class Constants {
     }
     public static final String ACCOUNT_NOT_FOUND_CODE="404";
 
+    public static final String NOT_AUTHORIZED_USER = "You are not an authorized user";
     public static final String ACCOUNT_NOT_FOUND_MESSAGE="Account not found for Id-";
     public static final String BALANCE_NOT_FOUND_MESSAGE="Balance details not found for Id-";
     public static final String ACCOUNT_DELETED_SUCCESS="Account deleted successfully";

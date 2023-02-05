@@ -4,9 +4,8 @@ import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.dto.BalanceDto;
 import com.maveric.accountservice.dto.UserDto;
 import com.maveric.accountservice.entity.Account;
-import com.maveric.accountservice.exception.AccountNotFoundException;
-import com.maveric.accountservice.exception.CustomerIDNotFoundExistsException;
-import com.maveric.accountservice.exception.UnAuthorizedException;
+import com.maveric.accountservice.enums.Constants;
+import com.maveric.accountservice.exception.*;
 import com.maveric.accountservice.feignclient.BalanceServiceConsumer;
 import com.maveric.accountservice.feignclient.TransactionServiceConsumer;
 import com.maveric.accountservice.feignclient.UserServiceConsumer;
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-
-import com.maveric.accountservice.exception.CustomerIdMissmatchException;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -56,15 +53,15 @@ public class AccountController {
 
     @GetMapping("customers/{customerId}/accounts/{accountId}")
     public AccountDto getAccount(@PathVariable("customerId") String customerId,
-    @PathVariable("accountId") String accountId,@RequestHeader String userEmail) throws AccountNotFoundException,CustomerIDNotFoundExistsException{
+                                 @PathVariable("accountId") String accountId, @RequestHeader(value = "userid") String headerUserId) throws AccountNotFoundException,CustomerIDNotFoundExistsException{
         log.info("API call to retrieve account details and its corresponding balance details for valid Account Id and Customer Id");
-        ResponseEntity<UserDto> responseEntityUserDto = userServiceConsumer.getUserDetails(customerId);
+        ResponseEntity<UserDto> responseEntityUserDto = userServiceConsumer.getUserById(customerId,headerUserId);
         UserDto userDto = responseEntityUserDto.getBody()==null?new UserDto():responseEntityUserDto.getBody(); //NOSONAR
 
 
-        if(userDto.getEmail().equalsIgnoreCase(userEmail)) {  //NOSONAR
+        if(userDto.getId().equalsIgnoreCase(headerUserId)) {  //NOSONAR
             AccountDto accountDtoResponse = accountService.getAccountByAccId(customerId,accountId);
-            ResponseEntity<BalanceDto> balanceDto = balanceServiceConsumer.getBalances(accountId);
+            ResponseEntity<BalanceDto> balanceDto = balanceServiceConsumer.getBalances(accountId,headerUserId);
             accountDtoResponse.setBalance(balanceDto.getBody());
             log.info("Retrieved account details.");
             return new ResponseEntity<>(accountDtoResponse, HttpStatus.OK).getBody();
@@ -81,11 +78,11 @@ public class AccountController {
     @PutMapping("customers/{customerId}/accounts/{accountId}")
     public ResponseEntity<Account> updateAccount(@PathVariable(name = "customerId") String customerId,
                                                  @Valid @PathVariable(name = "accountId") String accountId,
-                                                 @RequestBody Account account,@RequestHeader String userEmail) {
+                                                 @RequestBody Account account,@RequestHeader(value = "userid") String headerUserId) {
         log.info("API call to update account details");
-        ResponseEntity<UserDto> responseEntityUserDto = userServiceConsumer.getUserDetails(customerId);
+        ResponseEntity<UserDto> responseEntityUserDto = userServiceConsumer.getUserById(customerId,headerUserId);
         UserDto userDto = responseEntityUserDto.getBody()==null?new UserDto():responseEntityUserDto.getBody(); //NOSONAR
-        if(userDto.getEmail().equalsIgnoreCase(userEmail)) { //NOSONAR
+        if(userDto.getId().equalsIgnoreCase(headerUserId)) { //NOSONAR
             Account AccountDto = accountService.updateAccount(customerId, accountId, account);
 
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -104,30 +101,32 @@ public class AccountController {
         }
 
     }
-
-    @GetMapping("customers/{customerId}/customerAccounts")
-    public ResponseEntity<List<AccountDto>> getAccountsbyId(@PathVariable String customerId){
-        List<AccountDto> accountDtoResponse = accountService.getAccountsById(customerId);
-        return new ResponseEntity<>(accountDtoResponse, HttpStatus.OK);
-    }
     @GetMapping("customers/{customerId}/accounts")
-    public ResponseEntity<List<AccountDto>> getAccountByCustomerId(@PathVariable String customerId, @Valid @RequestParam(defaultValue = "0") Integer page,
-                                                                   @RequestParam(defaultValue = "10") @Valid Integer pageSize)throws CustomerIdMissmatchException {
-List<AccountDto> accountDtoResponse = accountService.getAccountByUserId(page, pageSize, customerId);
-        return new ResponseEntity<>(accountDtoResponse, HttpStatus.OK);
+    public ResponseEntity<List<AccountDto>> getAccountByCustomerId(@PathVariable String customerId,
+                                                                   @Valid @RequestParam(defaultValue = "0") Integer page,
+                                                                   @RequestParam(defaultValue = "10") @Valid Integer pageSize,
+                                                                   @RequestHeader(value = "userid") String headerUserId) throws CustomerIdMissmatchException {
 
+        if(headerUserId.equals(customerId)) {
+            List<AccountDto> accountDtoResponse = accountService.getAccountByUserId(page, pageSize, customerId);
+            return new ResponseEntity<>(accountDtoResponse, HttpStatus.OK);
+        } else {
+            throw new CustomerIdMissmatchException("You are not an authorized user");
+        }
     }
 
     @DeleteMapping("customers/{customerId}/accounts/{accountId}")
-    public ResponseEntity<String> deleteAccount(@PathVariable String customerId,@PathVariable String accountId,@RequestHeader String userEmail) {
+    public ResponseEntity<String> deleteAccount(@PathVariable String customerId,
+                                                @PathVariable String accountId,
+                                                @RequestHeader(value = "userid") String headerUserId) {
         log.info("API call to delete account details");
-        ResponseEntity<UserDto> responseEntityUserDto = userServiceConsumer.getUserDetails(customerId);
+        ResponseEntity<UserDto> responseEntityUserDto = userServiceConsumer.getUserById(customerId,headerUserId);
         UserDto userDto = responseEntityUserDto.getBody()==null?new UserDto():responseEntityUserDto.getBody(); //NOSONAR
-        if(userDto.getEmail().equalsIgnoreCase(userEmail)) { //NOSONAR
+        if(userDto.getId().equalsIgnoreCase(headerUserId)) { //NOSONAR
             String result = accountService.deleteAccount(accountId,customerId);
             if (result != null) {
-                balanceServiceConsumer.deleteBalanceByAccountId(accountId);
-                transactionServiceConsumer.deleteTransactionByAccountId(accountId);
+                balanceServiceConsumer. deleteBalanceByAccountId(accountId,headerUserId);
+                transactionServiceConsumer.deleteTransactionByAccountId(accountId,headerUserId);
             }
             log.info("Account deleted along with its corresponding balance and transaction details");
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -143,14 +142,21 @@ List<AccountDto> accountDtoResponse = accountService.getAccountByUserId(page, pa
 
     @PostMapping("customers/{customerId}/accounts")
     public ResponseEntity<AccountDto> createAccount (@PathVariable String customerId, @Valid @RequestBody AccountDto
-            accountDto){
+            accountDto, @RequestHeader(value = "userid") String headerUserId){
 
-        AccountDto accountDtoResponse = accountService.createAccount(customerId, accountDto);
-        return new ResponseEntity<>(accountDtoResponse, HttpStatus.CREATED);
+        if(headerUserId.equals(customerId)) {
+            UserDto userDto = userServiceConsumer.getUserById(customerId, headerUserId).getBody();
+            if(userDto.getId().equals(accountDto.getCustomerId())) {
+                AccountDto accountDtoResponse = accountService.createAccount(customerId, accountDto);
+                return new ResponseEntity<>(accountDtoResponse, HttpStatus.CREATED);
+            } else {
+                throw new CustomerIDNotFoundExistsException("Customer does not exist");
+            }
+        } else {
+            throw new CustomerIdMissmatchException(Constants.NOT_AUTHORIZED_USER);
+        }
 
 
     }
 
 }
-
-
