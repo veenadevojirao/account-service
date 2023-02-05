@@ -5,18 +5,17 @@ import com.maveric.accountservice.dto.BalanceDto;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name="balance-service")
-@Service
+
+
+@FeignClient(value = "balance", url = "http://localhost:3015/api/v1")
 public interface BalanceServiceConsumer {
 
-    @GetMapping("api/v1/accounts/{accountId}/balances")
-    public ResponseEntity <BalanceDto> getBalances(@PathVariable String accountId);
+    @GetMapping("accounts/{accountId}/balances")
+    public ResponseEntity <BalanceDto> getBalances(@PathVariable String accountId, @RequestHeader(value = "userid") String headerUserId);
 
-    @DeleteMapping("api/v1/accounts/{accountId}/balances")
-    public ResponseEntity<String> deleteBalanceByAccountId(@PathVariable String accountId);
-
+    @DeleteMapping("accounts/{accountId}/balances")
+    public ResponseEntity<String> deleteBalanceByAccountId(@PathVariable("accountId") String accountId,
+                                                           @RequestHeader(value = "userid") String headerUserId);
 }
-

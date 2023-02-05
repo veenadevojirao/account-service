@@ -75,118 +75,116 @@ public class AccountControllerTest {
     @Test
     void getAccountByCustomerId() throws Exception {
         ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(getUserDto(), HttpStatus.OK);
-        when(userServiceConsumer.getUserDetails(any(String.class))).thenReturn(responseEntity);
+        when(userServiceConsumer.getUserById(any(String.class), any(String.class))).thenReturn(responseEntity);
         mock.perform(get(apiV1)
-                        .contentType(MediaType.APPLICATION_JSON).header("userEmail", "maveric@gmail.com"))
+                        .contentType(MediaType.APPLICATION_JSON).header("userid", "1234"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-    @Test
-    void getAccountByCustomerId_failure() throws Exception {
-        mock.perform(get(apiV1)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print());
 
-    }
-
-    @Test
-    public void getAccounts() throws Exception
+   @Test
+    public void shouldGetStatus400WhenRequestMadeTogetAccounts() throws Exception
     {
+        mock.perform(get(invalidApiV1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    public void getAccounts() throws Exception {
 
         mock.perform(get("/api/v1/customers/1234/accounts")
                         .contentType(MediaType.APPLICATION_JSON).header("userId", "1234"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-    @Test
-    public void notgetAccounts() throws Exception {
-        mock.perform(get("/api/v1/customers/12346/accounts")
-                .contentType(MediaType.APPLICATION_JSON))
-    .andExpect(status().isOk())
-                .andDo(print());
 
-    }
+
     @Test
     void deleteAccount() throws Exception {
         ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(getUserDto(), HttpStatus.OK);
-        when(userServiceConsumer.getUserDetails(any(String.class))).thenReturn(responseEntity);
-        mock.perform(delete(apiV1+"/accountId1")
+        when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(responseEntity);
+        mock.perform(delete(apiV1 + "/accountId1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("userEmail", "maveric@gmail.com"))
+                        .header("userid", "1234"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     void deleteAccount_failure() throws Exception {
         ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(new UserDto(), HttpStatus.OK);
-        when(userServiceConsumer.getUserDetails(any(String.class))).thenReturn(responseEntity);
-        Throwable error = assertThrows(NestedServletException.class,()->mock.perform(delete(apiV1+"/accountId1")
+        when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(responseEntity);
+        Throwable error = assertThrows(NestedServletException.class, () -> mock.perform(delete(apiV1 + "/accountId1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("userEmail", "maveric@gmail.com")).andReturn());
+                .header("userid", "1234")).andReturn());
     }
+
     @Test
-    void updateAccount() throws Exception{
+    void updateAccount() throws Exception {
         ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(getUserDto(), HttpStatus.OK);
-        when(userServiceConsumer.getUserDetails(any(String.class))).thenReturn(responseEntity);
-        mock.perform(put(apiV1+"/accountId1")
+        when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(responseEntity);
+        mock.perform(put(apiV1 + "/accountId1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(getAccountDto()))
-                        .header("userEmail", "veena@gmail.com")
+                        .header("userid", "1234")
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
     @Test
-    void updateAccount_failure() throws Exception{
+    void updateAccount_failure() throws Exception {
         ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(new UserDto(), HttpStatus.OK);
-        when(userServiceConsumer.getUserDetails(any(String.class))).thenReturn(responseEntity);
-        Throwable error = assertThrows(NestedServletException.class,()->mock.perform(put(apiV1+"/accountId1")
+        when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(responseEntity);
+        Throwable error = assertThrows(NestedServletException.class, () -> mock.perform(put(apiV1 + "/accountId1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(getAccountDto()))
-                .header("userEmail", "veena@gmail.com")
+                .header("userid", "1234")
         ).andReturn());
     }
 
     @Test
-    void createAccounts() throws Exception{
-        ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(getAccountDto(), HttpStatus.OK);
-        when(accountService.createAccount(any(), any(AccountDto.class))).thenReturn(getAccountDto());
-        mock.perform(MockMvcRequestBuilders.post("/api/v1/customers/1/accounts")
-                        .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(getAccountDto())))
+    void createAccount() throws Exception{
+        ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(getUserDto(), HttpStatus.OK);
+        when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(responseEntity);
+        mock.perform(post("/api/v1/customers/1234/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(getAccountDto()))
+                        .header("userid", "1234")
+                )
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
 
 
-    public AccountDto getAccountDto(){
-        AccountDto accountDto=new AccountDto();
-        accountDto.setCustomerId("1");
+    public AccountDto getAccountDto() {
+        AccountDto accountDto = new AccountDto();
+        accountDto.setCustomerId("1234");
         accountDto.setType(Type.SAVINGS);
         accountDto.set_id("1");
         return accountDto;
     }
 
 
-
-
     @Test
-    void createAccounts_failure() throws Exception{
+    void createAccounts_failure() throws Exception {
         ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(getAccountDto1(), HttpStatus.OK);
-       when(accountService.createAccount(any(), any(AccountDto.class))).thenReturn(getAccountDto1());
+        when(accountService.createAccount(any(), any(AccountDto.class))).thenReturn(getAccountDto1());
         mock.perform(MockMvcRequestBuilders.post("/api/v1/customers/1/accounts")
                         .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(getAccountDto1())))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
-    public AccountDto getAccountDto1(){
-        AccountDto accountDto=new AccountDto();
+
+    public AccountDto getAccountDto1() {
+        AccountDto accountDto = new AccountDto();
         accountDto.setCustomerId("1");
         return accountDto;
     }
 
-    public ResponseEntity<List<Account>> getSampleAccount(){
+    public ResponseEntity<List<Account>> getSampleAccount() {
 
         List<Account> accountList = new ArrayList<>();
         Account account = new Account();
@@ -201,4 +199,3 @@ public class AccountControllerTest {
         return ResponseEntity.status(HttpStatus.OK).body(accountList);
     }
 }
-
