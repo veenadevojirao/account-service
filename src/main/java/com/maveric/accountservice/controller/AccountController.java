@@ -2,6 +2,7 @@ package com.maveric.accountservice.controller;
 
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.dto.BalanceDto;
+import com.maveric.accountservice.dto.TransactionDto;
 import com.maveric.accountservice.dto.UserDto;
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.enums.Constants;
@@ -123,18 +124,30 @@ public class AccountController {
         ResponseEntity<UserDto> responseEntityUserDto = userServiceConsumer.getUserById(customerId,headerUserId);
         UserDto userDto = responseEntityUserDto.getBody()==null?new UserDto():responseEntityUserDto.getBody(); //NOSONAR
         if(userDto.getId().equalsIgnoreCase(headerUserId)) { //NOSONAR
-            String result = accountService.deleteAccount(accountId,customerId);
-            if (result != null) {
-                balanceServiceConsumer. deleteBalanceByAccountId(accountId,headerUserId);
-                transactionServiceConsumer.deleteTransactionByAccountId(accountId,headerUserId);
+
+
+            if (accountRepository.findById(accountId).isPresent()) {
+
+                balanceServiceConsumer.deleteBalanceByAccountId(accountId,headerUserId);
+
+                transactionServiceConsumer.deleteAllTransactionsByAccountId(accountId,headerUserId);
+
+                accountService.deleteAccount(accountId,customerId);
+            }
+
+            else{
+                throw new AccountIDNotfoundException("AccountId is not available");
             }
             log.info("Account deleted along with its corresponding balance and transaction details");
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<>("Account deleted successfully", HttpStatus.OK);
+
+
         }
         else
         {
             log.error(AUTH_HEADER_ERROR_MESSAGE);
             throw new UnAuthorizedException(AUTH_HEADER_ERROR_MESSAGE);
+
         }
 
     }

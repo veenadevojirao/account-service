@@ -19,3 +19,4 @@ public interface BalanceServiceConsumer {
     public ResponseEntity<String> deleteBalanceByAccountId(@PathVariable("accountId") String accountId,
                                                            @RequestHeader(value = "userid") String headerUserId);
 }
+

@@ -9,6 +9,8 @@ import com.maveric.accountservice.enums.Currency;
 import com.maveric.accountservice.enums.Type;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,20 +33,21 @@ class AccountServiceApplicationTests {
 	}
 
 
-		public static Account getAccount ()
-		{
-			return Account.builder()
-					.customerId("1234")
-					.type(Type.SAVINGS)
-					.build();
-		}
-		public static AccountDto getAccountDto ()
-		{
-			return AccountDto.builder()
-					.customerId("1234")
-					.type(Type.CURRENT)
-					.build();
-		}
+	public static Account getAccount ()
+	{
+		return Account.builder()
+				.customerId("1234")
+				.type(Type.SAVINGS)
+				.build();
+	}
+	public static AccountDto getAccountDto ()
+	{
+		return AccountDto.builder()
+				.customerId("1234")
+				._id("1234")
+				.type(Type.CURRENT)
+				.build();
+	}
 	public static BalanceDto getBalanceDto()
 	{
 		return BalanceDto.builder()
@@ -53,16 +56,15 @@ class AccountServiceApplicationTests {
 				.currency(Currency.valueOf("INR"))
 				.build();
 	}
-	public static UserDto getUserDto()
+	public static ResponseEntity<UserDto> getUserDto()
 	{
-		return UserDto.builder()
-				.email("maveric@gmail.com")
-				.id("1234")
-				.build();
+		UserDto userDto=new UserDto();
+		userDto.setId("1234");
+		userDto.setEmail("maveric@gmail.com");
+		return ResponseEntity.status(HttpStatus.OK).body(userDto);
+
+
 	}
 
 
-		}
-
-
-
+}
