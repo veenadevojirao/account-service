@@ -91,14 +91,14 @@ public class AccountServiceImplTest {
     @Test
     void createAccount_failure() {
         Throwable error = assertThrows(PathParamsVsInputParamsMismatchException.class,()->service.createAccount("1233",getAccountDto()));  //NOSONAR
-        assertEquals("Customer Id-1234Missmatch",error.getMessage());
+        assertEquals("Customer Id Mismatch",error.getMessage());
     }
     @Test
     void deleteAccount() {
         when(repository.findById("123")).thenReturn(Optional.of(getAccount()));
         String accounDto = service.deleteAccount("123","1234");
 
-        assertSame( "Account deleted sucessfully",accounDto);
+        assertSame( "Account deleted successfully",accounDto);
 
     }
     @Test

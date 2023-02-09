@@ -13,7 +13,7 @@ public class ExceptionControlAdvisorTest {
     void CustomerIDNotFoundExistsException() {
         CustomerIDNotFoundExistsException exception = new CustomerIDNotFoundExistsException("Customer ID Not found");
         ErrorDto error = controllerAdvisor.handleCustomerIDNotFoundExistsException(exception);
-        assertEquals("Nosuch customerId is present!",error.getCode());
+        assertEquals("404",error.getCode());
     }
 
     @Test
