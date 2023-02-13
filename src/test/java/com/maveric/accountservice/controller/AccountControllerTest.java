@@ -80,7 +80,6 @@ public class AccountControllerTest {
 
     @Test
     void getAccountByCustomerId() throws Exception {
-//        ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(getUserDto(), HttpStatus.OK);
         when(userServiceConsumer.getUserById(any(String.class), any(String.class))).thenReturn(getUserDto());
         mock.perform(get(apiV1)
                         .contentType(MediaType.APPLICATION_JSON).header("userid", "1234"))
@@ -107,22 +106,8 @@ public class AccountControllerTest {
     }
 
 
-
-//    @Test
-//    public void shouldGetStatus200WhenRequestMadeToDeleteAccount() throws Exception
-//    {
-//        when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(new ResponseEntity<>(getUserDto()))
-//        when(balanceServiceConsumer.deleteBalanceByAccountId(any(String.class),any())).thenReturn(null);
-//        when(transactionServiceConsumer.deleteAllTransactionsByAccountId(any(String.class),any())).thenReturn(null);
-//        mock.perform(delete(apiV1+"/1234").header("userId","1234")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andDo(print());
-//    }
-
     @Test
     void deleteAccount() throws Exception {
-//        ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(getUserDto(), HttpStatus.OK);
         when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(getUserDto());
         when(accountRepository.findById(anyString())).thenReturn(Optional.of(getAccount()));
         //when(balanceServiceConsumer.deleteBalanceByAccountId(getAccount().get_id(),getAccount().getCustomerId())).thenReturn(any());
@@ -144,7 +129,7 @@ public class AccountControllerTest {
 
     @Test
     void updateAccount() throws Exception {
-//        ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(getUserDto(), HttpStatus.OK);
+
         when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(getUserDto());
         mock.perform(put(apiV1 + "/accountId1")
                         .contentType(MediaType.APPLICATION_JSON)
