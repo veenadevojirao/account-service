@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-@FeignClient(value = "balance", url = "http://localhost:3015/api/v1")
+@FeignClient(value = "balance-service")
 public interface BalanceServiceConsumer {
 
-    @GetMapping("accounts/{accountId}/balances")
+    @GetMapping("api/v1/accounts/{accountId}/balances")
     public ResponseEntity <BalanceDto> getBalances(@PathVariable String accountId, @RequestHeader(value = "userid") String headerUserId);
 
-    @DeleteMapping("accounts/{accountId}/balances")
+    @DeleteMapping("api/v1/accounts/{accountId}/balances")
     public ResponseEntity<String> deleteBalanceByAccountId(@PathVariable("accountId") String accountId,
                                                            @RequestHeader(value = "userid") String headerUserId);
 }
