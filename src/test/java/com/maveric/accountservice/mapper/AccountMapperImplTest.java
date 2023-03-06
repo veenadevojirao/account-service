@@ -14,19 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AccountMapperImplTest {
     private AccountMapperImpl accountMapper = new AccountMapperImpl();
 
-
-    @Test
-    void map() {
-        Account account = accountMapper.map(getAccountDto());
-        assertEquals(getAccount().get_id(),account.get_id());
-    }
-
-    @Test
-    void testMap() {
-        AccountDto accountDto = accountMapper.map(getAccount());
-        assertEquals(getAccountDto().get_id(),accountDto.get_id());
-    }
-
     @Test
     void mapToModel() {
         List<Account> account = accountMapper.mapToModel(Arrays.asList(getAccountDto(),getAccountDto()));

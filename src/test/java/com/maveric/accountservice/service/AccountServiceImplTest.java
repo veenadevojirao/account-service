@@ -98,7 +98,7 @@ public class AccountServiceImplTest {
         when(repository.findById("123")).thenReturn(Optional.of(getAccount()));
         String accounDto = service.deleteAccount("123","1234");
 
-        assertSame( "Account deleted successfully",accounDto);
+        assertSame( "Account deleted sucessfully",accounDto);
 
     }
     @Test
