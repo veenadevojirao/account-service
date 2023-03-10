@@ -2,7 +2,6 @@ package com.maveric.accountservice.controller;
 
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.dto.BalanceDto;
-import com.maveric.accountservice.dto.TransactionDto;
 import com.maveric.accountservice.dto.UserDto;
 import com.maveric.accountservice.entity.Account;
 import com.maveric.accountservice.enums.Constants;
@@ -106,13 +105,13 @@ public class AccountController {
     public ResponseEntity<List<AccountDto>> getAccountByCustomerId(@PathVariable String customerId,
                                                                    @Valid @RequestParam(defaultValue = "0") Integer page,
                                                                    @RequestParam(defaultValue = "10") @Valid Integer pageSize,
-                                                                   @RequestHeader(value = "userid") String headerUserId) throws CustomerIdMissmatchException {
+                                                                   @RequestHeader(value = "userid") String headerUserId) throws CustomerIdMismatchException {
 
         if(headerUserId.equals(customerId)) {
             List<AccountDto> accountDtoResponse = accountService.getAccountByUserId(page, pageSize, customerId);
             return new ResponseEntity<>(accountDtoResponse, HttpStatus.OK);
         } else {
-            throw new CustomerIdMissmatchException("You are not an authorized user");
+            throw new CustomerIdMismatchException("You are not an authorized user");
         }
     }
 
@@ -166,7 +165,7 @@ public class AccountController {
                 throw new CustomerIDNotFoundExistsException("Customer does not exist");
             }
         } else {
-            throw new CustomerIdMissmatchException(Constants.NOT_AUTHORIZED_USER);
+            throw new CustomerIdMismatchException(Constants.NOT_AUTHORIZED_USER);
         }
 
 

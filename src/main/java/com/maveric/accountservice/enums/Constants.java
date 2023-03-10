@@ -15,7 +15,6 @@ public class Constants {
 
     public static final String NOT_AUTHORIZED_USER = "You are not an authorized user";
     public static final String ACCOUNT_NOT_FOUND_MESSAGE="Account not found for Id-";
-    public static final String BALANCE_NOT_FOUND_MESSAGE="Balance details not found for Id-";
     public static final String ACCOUNT_DELETED_SUCCESS="Account deleted successfully";
     public static final String METHOD_NOT_ALLOWED_CODE="405";
     public static final String METHOD_NOT_ALLOWED_MESSAGE="Method Not Allowed. Kindly check the Request URL and Request Type.";

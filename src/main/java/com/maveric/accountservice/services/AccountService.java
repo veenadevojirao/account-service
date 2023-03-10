@@ -5,7 +5,7 @@ import com.maveric.accountservice.entity.Account;
 
 import com.maveric.accountservice.exception.AccountNotFoundException;
 
-import com.maveric.accountservice.exception.CustomerIdMissmatchException;
+import com.maveric.accountservice.exception.CustomerIdMismatchException;
 
 import com.maveric.accountservice.exception.CustomerIDNotFoundExistsException;
 
@@ -20,14 +20,14 @@ public interface AccountService {
 
     AccountDto getAccountByAccId(String customerId, String accountId) throws AccountNotFoundException,CustomerIDNotFoundExistsException;
     List<Account> getAccountById(String customerId);
-    public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String customerId)throws CustomerIdMissmatchException;
+    public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String customerId)throws CustomerIdMismatchException;
 
     Account updateAccount(String customerId, String accountId, Account account) throws CustomerIDNotFoundExistsException;
 
     Object updateAccount(Object any);
 
 
-    public String deleteAccount(String accountId,String CustomerID)throws CustomerIdMissmatchException;
+    public String deleteAccount(String accountId,String CustomerID)throws CustomerIdMismatchException;
 
 
     public AccountDto createAccount(String customerId, AccountDto accountDto);

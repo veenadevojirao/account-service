@@ -4,11 +4,9 @@ package com.maveric.accountservice.exception;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.maveric.accountservice.dto.ErrorDto;
 import com.maveric.accountservice.dto.ErrorReponseDto;
-import feign.FeignException;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,6 +29,14 @@ public class ExceptionControlAdvisor {
         errorDto.setCode(ACCOUNT_NOT_FOUND_CODE);
         errorDto.setMessage(exception.getMessage());
         return errorDto;
+    }
+    @ExceptionHandler(AccountIDNotfoundException.class)
+    public ResponseEntity<ErrorReponseDto> handllingException(AccountIDNotfoundException ex){
+        ErrorReponseDto response = new ErrorReponseDto();
+        response.setCode("400");
+        response.setMessage(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
     }
 
 
@@ -60,6 +66,14 @@ public class ExceptionControlAdvisor {
         errorDto.setCode(BAD_REQUEST_CODE);
         errorDto.setMessage(exception.getMessage());
         return errorDto;
+    }
+    @ExceptionHandler(CustomerIdMismatchException.class)
+    public ResponseEntity<ErrorReponseDto> handllingException (CustomerIdMismatchException ex){
+        ErrorReponseDto response = new ErrorReponseDto();
+        response.setCode("400");
+        response.setMessage(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
     }
 
     @ExceptionHandler({CustomerIDNotFoundExistsException.class})

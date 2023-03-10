@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import static com.maveric.accountservice.enums.Constants.ACCOUNT_DELETED_SUCCESS;
 import static com.maveric.accountservice.enums.Constants.ACCOUNT_NOT_FOUND_MESSAGE;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String deleteAccount(String accountId,String customerId) throws AccountNotFoundException,CustomerIdMissmatchException{
+    public String deleteAccount(String accountId,String customerId) throws AccountNotFoundException, CustomerIdMismatchException {
 
         Account account = accountRepository.findById(accountId).orElseThrow(
                 () -> new AccountIDNotfoundException("Account ID not available")
@@ -58,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.deleteById(accountId);
             return "Account deleted sucessfully";
         } else {
-            throw new CustomerIdMissmatchException("Customer ID not available");
+            throw new CustomerIdMismatchException("Customer ID not available");
         }
 
 
@@ -112,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<AccountDto> getAccountByUserId(Integer page, Integer pageSize, String customerId) throws
-            CustomerIdMissmatchException {
+            CustomerIdMismatchException {
         Pageable paging = PageRequest.of(page, pageSize);
         Page<Account> pageResult = accountRepository.findByCustomerId(paging, customerId);
         if (pageResult.hasContent()) {
@@ -120,7 +119,7 @@ public class AccountServiceImpl implements AccountService {
             log.info("Retrieved list of accounts from DB");
             return mapper.mapToDto(account);
         } else {
-            throw new CustomerIdMissmatchException("Account Details not found for this CustomerId");
+            throw new CustomerIdMismatchException("Account Details not found for this CustomerId");
 
         }
 
