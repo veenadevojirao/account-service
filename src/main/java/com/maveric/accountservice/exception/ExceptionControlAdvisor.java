@@ -31,7 +31,7 @@ public class ExceptionControlAdvisor {
         return errorDto;
     }
     @ExceptionHandler(AccountIDNotfoundException.class)
-    public ResponseEntity<ErrorReponseDto> handllingException(AccountIDNotfoundException ex){
+    public ResponseEntity<ErrorReponseDto> handleAccountIDNotfoundException(AccountIDNotfoundException ex){
         ErrorReponseDto response = new ErrorReponseDto();
         response.setCode("400");
         response.setMessage(ex.getMessage());

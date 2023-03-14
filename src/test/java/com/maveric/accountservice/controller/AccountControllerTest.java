@@ -173,7 +173,6 @@ public class AccountControllerTest {
         return accountDto;
     }
 
-
     @Test
     void createAccounts_failure() throws Exception {
         ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(getAccountDto1(), HttpStatus.OK);

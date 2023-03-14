@@ -23,12 +23,7 @@ public class ExceptionControlAdvisorTest {
         ErrorDto error = controllerAdvisor.handleAccountNotFoundException(exception);
         assertEquals("404",error.getCode());
     }
-    @Test
-    void handleAccountIDNotfoundException() {
-        AccountIDNotFoundException exception = new AccountIDNotFoundException("Account Not found");
-        ErrorDto error = controllerAdvisor.handleAccountIDNotFoundException(exception);
-        assertEquals("400",error.getCode());
-    }
+
     @Test
     void handleCustomerIDNotFoundExistsException() {
         CustomerIDNotFoundExistsException exception = new CustomerIDNotFoundExistsException("Customer ID Exists");

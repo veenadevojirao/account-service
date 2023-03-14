@@ -2,7 +2,7 @@ package com.maveric.accountservice.service;
 
 import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.entity.Account;
-import com.maveric.accountservice.exception.AccountIDNotFoundException;
+import com.maveric.accountservice.exception.AccountIDNotfoundException;
 
 import com.maveric.accountservice.exception.AccountNotFoundException;
 import com.maveric.accountservice.exception.PathParamsVsInputParamsMismatchException;
@@ -104,7 +104,7 @@ public class AccountServiceImplTest {
     }
     @Test
     void deleteAccount_failure() {
-        Throwable error = assertThrows(AccountIDNotFoundException.class,()->service.deleteAccount("1234","1234"));
+        Throwable error = assertThrows(AccountIDNotfoundException.class,()->service.deleteAccount("1234","1234"));
         assertEquals("Account ID not available",error.getMessage());
     }
 
