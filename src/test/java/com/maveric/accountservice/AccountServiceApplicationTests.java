@@ -56,6 +56,8 @@ class AccountServiceApplicationTests {
 				.currency(Currency.valueOf("INR"))
 				.build();
 	}
+
+
 	public static ResponseEntity<UserDto> getUserDto()
 	{
 		UserDto userDto=new UserDto();

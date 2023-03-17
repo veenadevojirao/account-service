@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.maveric.accountservice.AccountServiceApplicationTests.*;
-import static com.maveric.accountservice.enums.Constants.ACCOUNT_DELETED_SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -88,7 +87,15 @@ public class AccountControllerTest {
     }
 
     @Test
-    public void shouldGetStatus400WhenRequestMadeTogetAccounts() throws Exception
+    void getAccountByCustomerId_failure() throws Exception {
+        when(userServiceConsumer.getUserById(any(String.class), any(String.class))).thenReturn(getUserDto());
+        mock.perform(get(apiV1)
+                        .contentType(MediaType.APPLICATION_JSON).header("userid", "1234"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    @Test
+ void shouldGetStatus400WhenRequestMadeTogetAccounts() throws Exception
     {
         mock.perform(get(invalidApiV1)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -97,7 +104,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    public void getAccounts() throws Exception {
+    void getAccounts() throws Exception {
 
         mock.perform(get("/api/v1/customers/1234/accounts")
                         .contentType(MediaType.APPLICATION_JSON).header("userId", "1234"))
@@ -106,16 +113,16 @@ public class AccountControllerTest {
     }
 
 
+
     @Test
     void deleteAccount() throws Exception {
         when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(getUserDto());
         when(accountRepository.findById(anyString())).thenReturn(Optional.of(getAccount()));
-        //when(balanceServiceConsumer.deleteBalanceByAccountId(getAccount().get_id(),getAccount().getCustomerId())).thenReturn(any());
-        //when(transactionServiceConsumer.deleteAllTransactionsByAccountId(anyString(),anyString())).thenReturn(any());
         mock.perform(delete(apiV1 + "/accountId1").header("userid", "1234"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     void deleteAccount_failure() throws Exception {
         ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(new UserDto(), HttpStatus.OK);
@@ -153,8 +160,8 @@ public class AccountControllerTest {
 
     @Test
     void createAccount() throws Exception{
-//        ResponseEntity<UserDto> responseEntity = new ResponseEntity<>(getUserDto(), HttpStatus.OK);
         when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(getUserDto());
+        when(accountService.createAccount(any(), any(AccountDto.class))).thenReturn(getAccountDto1());
         mock.perform(post("/api/v1/customers/1234/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(getAccountDto()))
@@ -175,7 +182,7 @@ public class AccountControllerTest {
 
     @Test
     void createAccounts_failure() throws Exception {
-        ResponseEntity<AccountDto> responseEntity = new ResponseEntity<>(getAccountDto1(), HttpStatus.OK);
+        when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(getUserDto());
         when(accountService.createAccount(any(), any(AccountDto.class))).thenReturn(getAccountDto1());
         mock.perform(MockMvcRequestBuilders.post("/api/v1/customers/1/accounts")
                         .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(getAccountDto1())))
