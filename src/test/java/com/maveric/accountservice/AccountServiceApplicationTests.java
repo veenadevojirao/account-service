@@ -46,15 +46,19 @@ class AccountServiceApplicationTests {
 				.customerId("1234")
 				._id("1234")
 				.type(Type.CURRENT)
+				.balance(BalanceDto.builder().build())
 				.build();
+
+
 	}
-	public static BalanceDto getBalanceDto()
+	public static ResponseEntity<BalanceDto> getBalanceDto()
 	{
-		return BalanceDto.builder()
-				.accountId("1234")
-				.amount(1000)
-				.currency(Currency.valueOf("INR"))
-				.build();
+		BalanceDto balanceDto= new BalanceDto();
+		balanceDto.setAccountId("1234");
+		balanceDto.set_id("123");
+		balanceDto.setAmount(1000);
+		balanceDto.setCurrency(Currency.DOLLAR);
+		return ResponseEntity.status(HttpStatus.OK).body(balanceDto);
 	}
 
 

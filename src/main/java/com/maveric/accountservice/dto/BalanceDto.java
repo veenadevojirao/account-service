@@ -28,4 +28,7 @@ public class BalanceDto {
     private Date updatedAt;
 
 
+    public BalanceDto() {
+
+    }
 }

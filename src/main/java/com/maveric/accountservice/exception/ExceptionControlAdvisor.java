@@ -31,19 +31,18 @@ public class ExceptionControlAdvisor {
         return errorDto;
     }
     @ExceptionHandler(AccountIDNotfoundException.class)
-    public ResponseEntity<ErrorReponseDto> handleAccountIDNotfoundException(AccountIDNotfoundException ex){
+    public ErrorReponseDto handleAccountIDNotfoundException(AccountIDNotfoundException ex){
         ErrorReponseDto response = new ErrorReponseDto();
         response.setCode("400");
         response.setMessage(ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+      return response;
 
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDto handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public ErrorDto handleValidationExceptions(MethodArgumentNotValidException ex) {
         ErrorDto errorDto = new ErrorDto();
         errorDto.setCode(BAD_REQUEST_CODE);
         errorDto.setMessage(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());

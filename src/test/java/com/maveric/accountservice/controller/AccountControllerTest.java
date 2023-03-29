@@ -6,6 +6,7 @@ import com.maveric.accountservice.dto.AccountDto;
 import com.maveric.accountservice.dto.BalanceDto;
 import com.maveric.accountservice.dto.UserDto;
 import com.maveric.accountservice.entity.Account;
+import com.maveric.accountservice.enums.Currency;
 import com.maveric.accountservice.enums.Type;
 import com.maveric.accountservice.feignclient.BalanceServiceConsumer;
 import com.maveric.accountservice.feignclient.TransactionServiceConsumer;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.maveric.accountservice.AccountServiceApplicationTests.*;
+import static com.maveric.accountservice.AccountServiceApplicationTests.getBalanceDto;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -80,7 +82,7 @@ public class AccountControllerTest {
     @Test
     void getAccountByCustomerId() throws Exception {
         when(userServiceConsumer.getUserById(any(String.class), any(String.class))).thenReturn(getUserDto());
-        mock.perform(get(apiV1)
+        mock.perform(get(apiV1+ "?page=0&pageSize=2")
                         .contentType(MediaType.APPLICATION_JSON).header("userid", "1234"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -88,10 +90,9 @@ public class AccountControllerTest {
 
     @Test
     void getAccountByCustomerId_failure() throws Exception {
-        when(userServiceConsumer.getUserById(any(String.class), any(String.class))).thenReturn(getUserDto());
-        mock.perform(get(apiV1)
-                        .contentType(MediaType.APPLICATION_JSON).header("userid", "1234"))
-                .andExpect(status().isOk())
+        mock.perform(get(invalidApiV1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
     @Test
@@ -104,20 +105,36 @@ public class AccountControllerTest {
     }
 
     @Test
-    void getAccounts() throws Exception {
-
-        mock.perform(get("/api/v1/customers/1234/accounts")
-                        .contentType(MediaType.APPLICATION_JSON).header("userId", "1234"))
+    void getAccountsByAccId() throws Exception {
+        when(userServiceConsumer.getUserById(anyString(), anyString())).thenReturn(getUserDto());
+        when(accountService.getAccountByAccId(anyString(),anyString())).thenReturn(getAccountDto());
+        when(balanceServiceConsumer.getBalances(anyString(),anyString())).thenReturn((getBalanceDto()));
+        mvc.perform(get(API_V1_ACCOUNTS+"/1234"+"?page=0&pageSize=2")
+                        .contentType(MediaType.APPLICATION_JSON).header("userid", "1234"))
                 .andExpect(status().isOk())
                 .andDo(print());
-    }
 
+
+    }
+    @Test
+    void shouldnotgetAccountsByAccId() throws Exception {
+        when(userServiceConsumer.getUserById(anyString(), anyString())).thenReturn(getUserDto());
+        when(accountService.getAccountByAccId(anyString(),anyString())).thenReturn(getAccountDto());
+        when(balanceServiceConsumer.getBalances(anyString(),anyString())).thenReturn((getBalanceDto()));
+        mvc.perform(get(invalidApiV1)
+                        .contentType(MediaType.APPLICATION_JSON).header("userid", "1234"))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
+    }
 
 
     @Test
     void deleteAccount() throws Exception {
         when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(getUserDto());
         when(accountRepository.findById(anyString())).thenReturn(Optional.of(getAccount()));
+        when(balanceServiceConsumer.getBalances(anyString(),anyString())).thenReturn((getBalanceDto()));
         mock.perform(delete(apiV1 + "/accountId1").header("userid", "1234"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -129,7 +146,7 @@ public class AccountControllerTest {
         when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(responseEntity);
         when(balanceServiceConsumer.deleteBalanceByAccountId(any(String.class),any())).thenReturn(null);
         when(transactionServiceConsumer.deleteAllTransactionsByAccountId(any(String.class),any())).thenReturn(null);
-        Throwable error = assertThrows(NestedServletException.class, () -> mock.perform(delete(apiV1 + "/accountId1")
+        Throwable error = assertThrows(NestedServletException.class, () -> mock.perform(delete(invalidApiV1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("userid", "1234")).andReturn());
     }
@@ -175,6 +192,7 @@ public class AccountControllerTest {
     public AccountDto getAccountDto() {
         AccountDto accountDto = new AccountDto();
         accountDto.setCustomerId("1234");
+        accountDto.setBalance(balanceDto, 1234);
         accountDto.setType(Type.SAVINGS);
         accountDto.set_id("1");
         return accountDto;
@@ -184,7 +202,7 @@ public class AccountControllerTest {
     void createAccounts_failure() throws Exception {
         when(userServiceConsumer.getUserById(any(String.class),any())).thenReturn(getUserDto());
         when(accountService.createAccount(any(), any(AccountDto.class))).thenReturn(getAccountDto1());
-        mock.perform(MockMvcRequestBuilders.post("/api/v1/customers/1/accounts")
+        mock.perform(MockMvcRequestBuilders.post(API_V1_ACCOUNTS)
                         .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(getAccountDto1())))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
@@ -193,6 +211,7 @@ public class AccountControllerTest {
     public AccountDto getAccountDto1() {
         AccountDto accountDto = new AccountDto();
         accountDto.setCustomerId("1");
+        accountDto.setBalance(balanceDto, 1234);
         return accountDto;
     }
 
@@ -201,6 +220,7 @@ public class AccountControllerTest {
         List<Account> accountList = new ArrayList<>();
         Account account = new Account();
         account.setCustomerId("1");
+
 
         Account account1 = new Account();
         account1.setCustomerId("2");

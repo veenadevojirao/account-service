@@ -55,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
         );
         if (customerId.equals(account.getCustomerId())) {
             accountRepository.deleteById(accountId);
-            return "Account deleted sucessfully";
+            return "Account deleted successfully";
         } else {
             throw new CustomerIdMismatchException("Customer ID not available");
         }

@@ -3,6 +3,7 @@ package com.maveric.accountservice.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.maveric.accountservice.enums.Type;
 import lombok.*;
+import org.springframework.http.ResponseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Temporal;
@@ -34,4 +35,6 @@ public class AccountDto{
     private BalanceDto balance;
 
 
+    public void setBalance(ResponseEntity<BalanceDto> balanceDto, int i) {
+    }
 }

@@ -45,12 +45,21 @@ public class AccountServiceImplTest {
     private Page pageResult;
     @Test
 
-    void getAccountDetailsById() throws AccountNotFoundException {
+    void getAccountByAccId() throws AccountNotFoundException {
         when(repository.findById(any(String.class))).thenReturn(Optional.empty());
         assertThrows(AccountNotFoundException.class,()->{
             service.getAccountByAccId("1","1");
         });
     }
+    @Test
+
+    void shouldnotgetAccountByAccId() throws AccountNotFoundException {
+        when(repository.findById(any(String.class))).thenReturn(Optional.empty());
+        assertThrows(AccountNotFoundException.class,()->{
+            service.getAccountByAccId("2","1");
+        });
+    }
+
 
     @Test
     public void testGetAccounts() {
